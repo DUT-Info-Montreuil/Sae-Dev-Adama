@@ -1,5 +1,5 @@
 # Sae-Dev-Adama
 
-Fabrice Amegadjen, 
-Jérémy Berguig, 
-Lior lichten -->  llichten29
+Fabrice Amegadjen(Gilgamesh-lab), 
+Jérémy Berguig(ShimmerPlume) , 
+Lior Lichten(llichten29)
