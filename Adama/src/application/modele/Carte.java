@@ -2,14 +2,11 @@ package application.modele;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import application.modele.exception.ErreurInventairePlein;
-import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.exception.TailleMapException;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Pierre;
+import application.modele.ressources.Plante;
 import application.modele.ressources.PlanteDeNike;
 import application.modele.ressources.PlanteHercule;
 import application.modele.ressources.PlanteMedicinale;
@@ -22,8 +19,6 @@ import javafx.collections.ObservableList;
  * Cette classe contient 3 constante qui sont la hauteur et la largeur de la map en nombre de blocs et la taille de chaque bloc.
  * Elle peut lancer deux exception : TailleMapException, IOException
  * Elle possède un constructeur
- * 
- * @author jberguig
  *
  */
 public class Carte {
@@ -31,7 +26,7 @@ public class Carte {
 	private BufferedReader map;
 	public final static int HAUTEUR = 32;
 	public final static int LARGEUR = 60;
-	public final static int TAILLE_BLOCK = 32;
+	public final static int TAILLE_BLOC = 32;
 	private ObservableList<Ressource> blocMap;
 	private Inventaire items;
 
@@ -42,17 +37,8 @@ public class Carte {
 		this.items = new Inventaire(99);
 	}
 	
-	/**
-	 * Calcule un indice dans la map en divisant les x et les y par la taille du bloc et en multipliant
-	 * les y par la Largeur de la Carte puisque la structure de données est linéaire. 
-	 * Et enfin de faire la somme des deux pour retourner le bloc a cette indice
-	 * @param x position sur l'axe des x
-	 * @param y position sur l'axe des y
-	 * @return le bloc à indiceMap
-	 */
-	
 	public int aMemeLeSol(int x) {
-		x-=x%TAILLE_BLOCK;
+		x-=x%TAILLE_BLOC;
 		int y = -1;
 		int i = 0;
 		boolean trouvee=false;
@@ -66,23 +52,35 @@ public class Carte {
 		}		
 		return y;
 	}
-
-	public int getHauteur() {
-		return HAUTEUR;
-	}
-
-	public int getLargeur() {
-		return LARGEUR;
-	}
 	
 	public Ressource emplacement(int x, int y) {
-		int indiceDansMap = (x/TAILLE_BLOCK) + ((y/TAILLE_BLOCK) * LARGEUR);
+		int indiceDansMap = (x/TAILLE_BLOC) + ((y/TAILLE_BLOC) * LARGEUR);
 		return this.blocMap.get(indiceDansMap);
 	}
 	
+	/**
+	 * Renvoie la première ressource qui se trouve à l'endroit occuper par le personnage et null si il n'y en a aucun
+	 * @param x du personnage
+	 * @param y du personnage
+	 * @param taille du personnage
+	 * @return
+	 */
 	public Ressource emplacement(int x, int y, int[] taille) {
-		int indiceDansMap = (x/TAILLE_BLOCK)+(taille[0]/2) + ((y/TAILLE_BLOCK) * LARGEUR)+taille[1];
-		return this.blocMap.get(indiceDansMap);
+		Ressource unBloc = null;
+		int longueur=0;
+		int hauteur;
+		while((unBloc==null || unBloc instanceof Plante) && longueur<taille[0]) {
+			hauteur=0;
+			while((unBloc==null || unBloc instanceof Plante) && hauteur<taille[1]) {
+				unBloc = emplacement(x+TAILLE_BLOC*longueur, y+TAILLE_BLOC*hauteur);
+				System.out.println("unBloc = "+unBloc);
+				hauteur++;
+			}
+			longueur++;
+		}
+		if (unBloc instanceof Plante)
+			unBloc=null;
+		return unBloc;
 	}
 	
 	/**
@@ -111,22 +109,22 @@ public class Carte {
 				suivant=ligne.charAt(indice);
 				switch (suivant) {
 					case '2':
-						blocMap.add(new Terre(true, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Terre(true, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '3':
-						blocMap.add(new Bois(false, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Bois(false, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '4':
-						blocMap.add(new Pierre(false, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Pierre(false, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '5':
-						blocMap.add(new PlanteDeNike(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteDeNike(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '6':
-						blocMap.add(new PlanteHercule(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteHercule(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '7':
-						blocMap.add(new PlanteMedicinale(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteMedicinale(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					default://tous las chiffres de tuile avec lesquelles on ne peut intéragir (ciel, nuage,...)
 						blocMap.add(null);
@@ -169,18 +167,10 @@ public class Carte {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @return la blocMap
-	 */
 	public ObservableList<Ressource> getBlockMap() {
 		return blocMap;
 	}
 	
-	/**
-	 * 
-	 * @return la liste d'items de la map
-	 */
 	public Inventaire getItems() {
 		return items;
 	}

@@ -167,10 +167,10 @@ public class Joueur extends Personnage {
 			}
 		}
 		if(this.getDirection()) {
-			emplacement = this.getX() + Carte.TAILLE_BLOCK;
+			emplacement = this.getX() + Carte.TAILLE_BLOC;
 		}
 		else {
-			emplacement = this.getX() + Carte.TAILLE_BLOCK;
+			emplacement = this.getX() + Carte.TAILLE_BLOC;
 		}
 		if(this.objetEquiper instanceof Arme) {
 			this.getEnvironnement().attaquerPersonnages(emplacement, this.getArmeEquiper().getDegat());

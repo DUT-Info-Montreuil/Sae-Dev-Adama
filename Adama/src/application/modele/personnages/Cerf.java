@@ -24,7 +24,7 @@ public class Cerf extends Pnj {
 	}
 
 	public void agir() throws ErreurObjetIntrouvable  {
-		if (this.estPrèsDuJoueur(Carte.TAILLE_BLOCK*5, TAILLE[1]*Carte.TAILLE_BLOCK)) {
+		if (this.estPrèsDuJoueur(Carte.TAILLE_BLOC*5, TAILLE[1]*Carte.TAILLE_BLOC)) {
 			if(this.ouSeTrouveLeJoueur()) {// si le joueur se trouve à sa droite
 				this.gauche();
 				if(!this.touchePasX(getDirection()))

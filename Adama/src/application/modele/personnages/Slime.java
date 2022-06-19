@@ -24,7 +24,7 @@ public class Slime extends Ennemis {
 	public void agir() throws ErreurObjetIntrouvable{
 		if (!this.getEnvironnement().getJoueur().estMort())
 			if (!this.touchePasY(false)) {
-				if(!this.estPrèsDuJoueur(Carte.TAILLE_BLOCK, Carte.TAILLE_BLOCK*2)) {
+				if(!this.estPrèsDuJoueur(Carte.TAILLE_BLOC, Carte.TAILLE_BLOC*2)) {
 					if(this.ouSeTrouveLeJoueur()) {// si le joueur se trouve à sa droite
 						this.droite();
 						this.setEnDeplacement(true);
@@ -38,7 +38,7 @@ public class Slime extends Ennemis {
 				}
 			}	
 			else
-				if(!this.estPrèsDuJoueur(Carte.TAILLE_BLOCK, Carte.TAILLE_BLOCK*2) && this.getEnDeplacement()) 
+				if(!this.estPrèsDuJoueur(Carte.TAILLE_BLOC, Carte.TAILLE_BLOC*2) && this.getEnDeplacement()) 
 					if(this.ouSeTrouveLeJoueur()) // si le joueur se trouve à sa droite
 						this.droite();
 					else // si le joueur se trouve à sa gauche

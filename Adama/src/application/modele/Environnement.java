@@ -55,12 +55,17 @@ public class Environnement {
 	private ArrayList<Pnj> faireSpawner() {
 		ArrayList<Pnj> vontSpawner = new ArrayList<Pnj>();
 		double chanceSpwan = Math.random();
-		int x = (int) (Math.random()*Carte.TAILLE_BLOCK*Carte.LARGEUR);
+		int x = (int) (Math.random()*Carte.TAILLE_BLOC*Carte.LARGEUR);
 		int y = this.carte.aMemeLeSol(x);
-		if (chanceSpwan<0.001)
-			vontSpawner.add(new Slime(x, y-Carte.TAILLE_BLOCK*Slime.TAILLE[1], this));
-		else if (chanceSpwan<0.003)
-			vontSpawner.add(new Cerf(x, y-Carte.TAILLE_BLOCK*Cerf.TAILLE[1], this));
+		System.out.println(this.carte.emplacement(x, y, Cerf.TAILLE));
+		if (chanceSpwan<0.001) {
+			vontSpawner.add(new Slime(x, y-Carte.TAILLE_BLOC*Slime.TAILLE[1], this));
+		}
+		else if (chanceSpwan<0.003) {
+			y = y - Carte.TAILLE_BLOC*Cerf.TAILLE[1];
+			if(this.carte.emplacement(x, y, Cerf.TAILLE)==null)
+				vontSpawner.add(new Cerf(x, y, this));
+		}
 		return vontSpawner;
 	}
 	
@@ -84,7 +89,7 @@ public class Environnement {
 
 
 	public Personnage emplacement(int x, int y) {
-		int indiceDansMap = (x/this.getCarte().getHauteur()) + ((y/this.getCarte().getHauteur()) * this.getCarte().getLargeur());
+		int indiceDansMap = (x/Carte.HAUTEUR + (y/Carte.HAUTEUR * Carte.LARGEUR));
 		return this.personnages.get(indiceDansMap);
 	}
 

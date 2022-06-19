@@ -98,7 +98,7 @@ public class Controleur implements Initializable{
 		int y = (int) event.getSceneY();
 		Ressource cible = env.getCarte().emplacement(x, y);
 		if (cible==null) {
-			int indiceDansMap = (x/Carte.TAILLE_BLOCK) + ((y/Carte.TAILLE_BLOCK) * Carte.LARGEUR);
+			int indiceDansMap = (x/Carte.TAILLE_BLOC) + ((y/Carte.TAILLE_BLOC) * Carte.LARGEUR);
 			persoControleur.sourisPresse(click, indiceDansMap);
 		}
 		else {
@@ -200,8 +200,8 @@ public class Controleur implements Initializable{
 						persoControleur = new JoueurControleur((Joueur)nouveau, persoVue);
 						persoVue.getSprite().xProperty().bind(nouveau.xProperty());
 						persoVue.getSprite().yProperty().bind(nouveau.yProperty());
-						persoVue.getSprite().setFitWidth(nouveau.getTaille()[0]*Carte.TAILLE_BLOCK);
-						persoVue.getSprite().setFitHeight(nouveau.getTaille()[1]*Carte.TAILLE_BLOCK);
+						persoVue.getSprite().setFitWidth(nouveau.getTaille()[0]*Carte.TAILLE_BLOC);
+						persoVue.getSprite().setFitHeight(nouveau.getTaille()[1]*Carte.TAILLE_BLOC);
 					}
 					else {
 						nouveauPnjVue = new PersonnageVue(nouveau.getClass().getSimpleName());
@@ -210,8 +210,8 @@ public class Controleur implements Initializable{
 						iaControleurs.add(ia);
 						nouveauPnjVue.getSprite().xProperty().bind(nouveau.xProperty());
 						nouveauPnjVue.getSprite().yProperty().bind(nouveau.yProperty());
-						nouveauPnjVue.getSprite().setFitWidth(nouveau.getTaille()[0]*Carte.TAILLE_BLOCK);
-						nouveauPnjVue.getSprite().setFitHeight(nouveau.getTaille()[1]*Carte.TAILLE_BLOCK);
+						nouveauPnjVue.getSprite().setFitWidth(nouveau.getTaille()[0]*Carte.TAILLE_BLOC);
+						nouveauPnjVue.getSprite().setFitHeight(nouveau.getTaille()[1]*Carte.TAILLE_BLOC);
 					}
 				}
 			}});
