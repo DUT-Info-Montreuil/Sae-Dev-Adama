@@ -4,6 +4,7 @@ import application.modele.Checkpoint;
 import application.modele.Environnement;
 import application.modele.Inventaire;
 import application.modele.effet.Effet;
+import application.modele.effet.Ralentir;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
 import java.io.IOException;
@@ -215,17 +216,25 @@ public abstract class Personnage {
 	}
 
 	public void translationX(int val) {
-		this.xProperty.setValue(this.getX() - val);
+			this.xProperty.setValue(this.getX() - val);
 	}
 
 	public void droite() {
-		if(touchePasX(true))
-			this.translationX(-vitesseDeplacement);
+		if(touchePasX(true)) {
+			if(effets.get(1)==null)
+				this.translationX(-vitesseDeplacement);
+			else
+				this.translationX(-Ralentissement());
+		}
 	}
 
 	public void gauche() {
-		if(touchePasX(false))
-			this.translationX(vitesseDeplacement);
+		if(touchePasX(true)) {
+			if(effets.get(1)==null)
+				this.translationX(vitesseDeplacement);
+			else
+				this.translationX(Ralentissement());
+		}
 	}
 
 	/**
@@ -268,12 +277,12 @@ public abstract class Personnage {
 	}
 
 	/**
-	 * Sera utile quand potion implementé
-	 * @param vitesseBonus
+	 * Divise la vitesse par 2
+	 * @param vitesseMalus
 	 * @return
 	 */
-	public int Deplacement(int vitesseBonus) {
-		return this.vitesseDeplacement*(vitesseBonus/100)+this.vitesseDeplacement;
+	public int Ralentissement () {
+		return this.vitesseDeplacement/2;
 	}
 
 	public void perdreRessources() throws ErreurInventairePlein { // Lorsque mort perd ses ressources
@@ -289,6 +298,44 @@ public abstract class Personnage {
 		this.descendre(2);
 		if (this.saut)
 			sauter();
+	}
+	
+	/**
+	 * Ajoute un effet à la liste effets en fonction de quelle type d'effet il s'agit
+	 * Si effet est Empoisonner 1er position 
+	 * Si effet est Ralentir 2eme position 
+	 * Si effet est Renfoncer 3eme position 
+	 * Si effet est Accelerer 4eme position 
+	 * @param effet
+	 */
+	public void ajouterEffet(Effet effet) {
+		String quelleEffet = effet.getClass().getSimpleName();
+		switch (quelleEffet) {
+		case "Empoisoner":
+			effets.add(0, effet);
+			break;
+		case "Ralentir":
+			effets.add(1, effet);
+		case "Renforcer":
+			effets.add(2, effet);
+			break;
+		case "Accelerer":
+			effets.add(3, effet);
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void SupprimerEffet(int i) {
+		effets.remove(i);
+		effets.add(i, null);
+
+	}
+	
+	
+	public ObservableList<Effet> getEffets() {
+		return effets;
 	}
 
 	public final int getPv() {
@@ -433,8 +480,4 @@ public abstract class Personnage {
 		return id;
 	}
 
-	public void SupprimerEffet(int i) {
-		// TODO Auto-generated method stub
-
-	}
 }

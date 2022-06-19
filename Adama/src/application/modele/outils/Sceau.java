@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 public class Sceau extends Outil {
 
 	private BooleanProperty estRempli;
-	private final static int TEMPS_REMPLISSAGE = 17647; //correspond à environ 5 minutes
+	public final static int TEMPS_REMPLISSAGE = 17647; //correspond à environ 5 minutes
 	private Eau eau;
 
 	public Sceau(Environnement env) {
@@ -33,10 +33,6 @@ public class Sceau extends Outil {
 		setEstRempli(false);
 	}
 
-
-	public static int getTempsRemplissage() {
-		return TEMPS_REMPLISSAGE;
-	}
 
 	public Eau getEau() {
 		return eau;

@@ -1,15 +1,20 @@
 package application.modele.potions;
 
-public class PotionDegat implements Potion {
-	
-	private final static double AUGMENTATION_DEGAT = 1.5;
+import application.modele.effet.Renforcer;
+import application.modele.exception.ErreurObjetIntrouvable;
+import application.modele.personnages.Joueur;
 
-	public PotionDegat() {
-		
+public class PotionDegat extends Potion {
+	
+	private final Renforcer effet = new Renforcer(getJoueur());
+
+	public PotionDegat(Joueur joueur) {
+		super(joueur);
 	}
 
 	@Override
 	public void utiliser(int val) {
-	
+		effet.appliquerEffet();
+		getJoueur().getInventaire().getItems().remove(this);
 	}
 }

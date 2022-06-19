@@ -1,19 +1,20 @@
 package application.modele.potions;
 
-public class PotionVie implements Potion {
+import application.modele.exception.ErreurObjetIntrouvable;
+import application.modele.personnages.Joueur;
+
+public class PotionVie extends Potion {
 	
-	private static final int NOMBRE_PV_RESTAURER = 3;
+	public static final int NOMBRE_PV_RESTAURER = 3;
 	
-	public PotionVie() {
-		// TODO Auto-generated constructor stub
+	public PotionVie(Joueur joueur) {
+		super(joueur);
 	}
 
 	@Override
 	public void utiliser(int val) {
-	
+		super.getJoueur().incrementerPv(NOMBRE_PV_RESTAURER);
+		getJoueur().getInventaire().getItems().remove(this);
 	}
-	
-	public static int getNombrePvRestaurer() {
-		return NOMBRE_PV_RESTAURER;
-	}
+
 }

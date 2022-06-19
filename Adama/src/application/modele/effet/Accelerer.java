@@ -1,24 +1,21 @@
 package application.modele.effet;
 
+import application.modele.personnages.Personnage;
+
 public class Accelerer extends Effet {
 	
-	private static final int POURCENTAGE_ACCELERATION = 75;
+	public static final int POURCENTAGE_ACCELERATION = 75;
+	public static final int DUREE = 8823; // correspond a 2 munites 30
 	
-	public Accelerer() {
-		super();
-	}
-	public Accelerer (int durée) {
-		super(durée);
+	public Accelerer (Personnage perso) {
+		super(DUREE, perso);
 	}
 	
 	@Override
-	public int appliquerEffet() {
-		int p = POURCENTAGE_ACCELERATION;
-		return p;
+	public void appliquerEffet() {
+		super.getPerso().ajouterEffet(this);
 		
-	}
-	public static int getPourcentageAcceleration() {
-		return POURCENTAGE_ACCELERATION;
+		
 	}
 
 }
