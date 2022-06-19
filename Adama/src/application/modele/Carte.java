@@ -3,13 +3,11 @@ package application.modele;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.TailleMapException;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Pierre;
+import application.modele.ressources.Plante;
 import application.modele.ressources.PlanteDeNike;
 import application.modele.ressources.PlanteHercule;
 import application.modele.ressources.PlanteMedicinale;
@@ -22,8 +20,6 @@ import javafx.collections.ObservableList;
  * Cette classe contient 3 constante qui sont la hauteur et la largeur de la map en nombre de blocs et la taille de chaque bloc.
  * Elle peut lancer deux exception : TailleMapException, IOException
  * Elle possède un constructeur
- * 
- * @author jberguig
  *
  */
 public class Carte {
@@ -42,15 +38,6 @@ public class Carte {
 		this.items = new Inventaire(99);
 	}
 	
-	/**
-	 * Calcule un indice dans la map en divisant les x et les y par la taille du bloc et en multipliant
-	 * les y par la Largeur de la Carte puisque la structure de données est linéaire. 
-	 * Et enfin de faire la somme des deux pour retourner le bloc a cette indice
-	 * @param x position sur l'axe des x
-	 * @param y position sur l'axe des y
-	 * @return le bloc à indiceMap
-	 */
-	
 	public int aMemeLeSol(int x) {
 		x-=x%TAILLE_BLOC;
 		int y = -1;
@@ -66,18 +53,34 @@ public class Carte {
 		}		
 		return y;
 	}
-
-	public int getHauteur() {
-		return HAUTEUR;
-	}
-
-	public int getLargeur() {
-		return LARGEUR;
-	}
 	
 	public Ressource emplacement(int x, int y) {
 		int indiceDansMap = (x/TAILLE_BLOC) + ((y/TAILLE_BLOC) * LARGEUR);
 		return this.blocMap.get(indiceDansMap);
+	}
+	
+	/**
+	 * Renvoie la première ressource qui se trouve à l'endroit occuper par le personnage et null si il n'y en a aucun
+	 * @param x du personnage
+	 * @param y du personnage
+	 * @param taille du personnage
+	 * @return
+	 */
+	public Ressource emplacement(int x, int y, int[] taille) {
+		Ressource unBloc = null;
+		int longueur=0;
+		int hauteur;
+		while((unBloc==null || unBloc instanceof Plante) && longueur<taille[0]) {
+			hauteur=0;
+			while((unBloc==null || unBloc instanceof Plante) && hauteur<taille[1]) {
+				unBloc = emplacement(x+TAILLE_BLOC*longueur, y+TAILLE_BLOC*hauteur);
+				hauteur++;
+			}
+			longueur++;
+		}
+		if (unBloc instanceof Plante)
+			unBloc=null;
+		return unBloc;
 	}
 	
 	/**

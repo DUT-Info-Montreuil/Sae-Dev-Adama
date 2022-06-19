@@ -3,6 +3,7 @@ package application.controleur;
 
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import application.modele.Carte;
@@ -61,9 +62,10 @@ public class Controleur implements Initializable{
 	private EnvironnementVue envVue;
 	private ListChangeListener<Ressource> listResssourceListener;
 	private ListChangeListener<Personnage> listPersonnageListener;
-	private PersonnageVue nouveauPnjVue;
-	private Sceau seau;	
 	private IaControleur ia;
+	private ArrayList<IaControleur> iaControleurs;
+	private PersonnageVue nouveauPnjVue;
+	private Sceau sceau;
 
 	@FXML
 	void ouvrirInventaire(ActionEvent event) {
@@ -71,7 +73,6 @@ public class Controleur implements Initializable{
 	}
 
 	private void ouvrirInventaire() {
-		System.out.println("Bonjour");
 		if(!inventaire.isVisible()) {
 			inventaire.setDisable(false);
 			inventaire.setVisible(true);
@@ -124,21 +125,23 @@ public class Controleur implements Initializable{
 		}
 
 	}
-
+	
+	@FXML
+	void toucheRelache(KeyEvent event) throws ErreurInventairePlein {
+		String touchePresse = event.getCode().toString().toLowerCase();
+		System.out.println(touchePresse);
+		persoControleur.toucheRelache(touchePresse);
+	}
+		
 	@FXML
 	void touchePresse(KeyEvent event) throws ErreurInventairePlein {
 		String touchePresse = event.getCode().toString().toLowerCase();
-		/*
-		 * TODO
-		 * Mettre un switch pour gérer les action qui nécessite un wait (ex: pause avec echap)
-		 * et en default persoControleur.touchePresse(touchePresse)
-		 */
 
 		//		System.out.println(touchePresse);
 		switch (touchePresse) {
 		case "e":
 			ouvrirInventaire();
-			break;						
+			break;
 		default:
 			persoControleur.touchePresse(touchePresse);
 			break;
@@ -153,7 +156,9 @@ public class Controleur implements Initializable{
 			e.printStackTrace();
 		}
 		envVue = new EnvironnementVue(env, carte);
-
+		iaControleurs = new ArrayList<>();
+		
+		
 ///////////List Listener
 
 	//////////Bloc de la carte
@@ -195,6 +200,7 @@ public class Controleur implements Initializable{
 						nouveauPnjVue = new PersonnageVue(nouveau.getClass().getSimpleName());
 						this.plateau.getChildren().add(nouveauPnjVue.getSprite());
 						ia = new IaControleur((Pnj)nouveau, nouveauPnjVue);
+						iaControleurs.add(ia);
 						nouveauPnjVue.getSprite().xProperty().bind(nouveau.xProperty());
 						nouveauPnjVue.getSprite().yProperty().bind(nouveau.yProperty());
 						nouveauPnjVue.getSprite().setFitWidth(nouveau.getTaille()[0]*Carte.TAILLE_BLOC);
@@ -218,13 +224,11 @@ public class Controleur implements Initializable{
 		perso.getInventaire().getItems().addListener(invControleur);
 
 		Carte carte = env.getCarte();
-		seau = new Sceau(carte, perso);
+		sceau = new Sceau(carte, perso);
 		try {
 			perso.getInventaire().ajouter(new Hache(carte,perso));
 			perso.getInventaire().ajouter(new Pelle(carte,perso));
 			perso.getInventaire().ajouter(new Pioche(carte,perso));
-			perso.getInventaire().ajouter(seau);
-			perso.getInventaire().ajouter(new Epee());
 		} catch (ErreurInventairePlein e) {
 			System.out.println("Plein");
 		}
@@ -243,13 +247,14 @@ public class Controleur implements Initializable{
 		gameLoop = new Timeline();
 		temps=0;
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
-
-		
 		KeyFrame kf = new KeyFrame(Duration.seconds(0.017),
 				(ev -> {
 					env.tourDejeu();
-					if (temps%Sceau.getTempsRemplissage()==0 && !seau.EstRempli() && temps!=0) {
-						seau.remplir();
+					for (int i=0; i<iaControleurs.size(); i++) {
+						iaControleurs.get(i).orienterPnjSprite();
+					}
+					if (temps%Sceau.getTempsRemplissage()==0 && !sceau.EstRempli() && temps!=0) {
+						sceau.remplir();
 					}
 					temps++;
 				}));

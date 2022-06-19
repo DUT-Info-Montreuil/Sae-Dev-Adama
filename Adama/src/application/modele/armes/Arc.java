@@ -2,6 +2,7 @@ package application.modele.armes;
 
 import java.util.ArrayList;
 
+import application.modele.Carte;
 import application.modele.Environnement;
 import application.modele.Inventaire;
 import application.modele.exception.ErreurInventairePlein;
@@ -32,7 +33,7 @@ public class Arc extends Arme {
 	public void tirer(Environnement environnement, boolean direction) throws ErreurInventairePlein {
 		int distance = 0;
 		int lieu = 0;
-		int largeur = environnement.getCarte().getLargeur();
+		int largeur = Carte.LARGEUR;
 		//environnement.getCarte().getPoubelle().ajouter(this.fleche);
 		while(this.getPorter() >= distance) {
 			fleche.tirer(direction);

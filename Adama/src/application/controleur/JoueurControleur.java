@@ -26,21 +26,20 @@ public class JoueurControleur {
 		switch (touchePresse) {
 			case "q":
 				persoVue.orrientationSpriteGauche();
-				if (perso.getSaut())
-					perso.sauterEnDirection(false);
-				else
-					perso.gauche();
+				perso.setEnDeplacement(true);
+				perso.gauche();
 				break;
 			case "d":
 				persoVue.orrientationSpriteDroite();
-				if (perso.getSaut())
-					perso.sauterEnDirection(true);
-				else
-					perso.droite();
+				perso.setEnDeplacement(true);
+				perso.droite();
 				break;
 			case "z":
 				if(!perso.touchePasY(false))
-					perso.sauter();
+					if(perso.getEnDeplacement())
+						perso.sauterEnDirection(perso.getDirection());
+					else
+						perso.sauter();
 				break;
 			case "s":
 				break;
@@ -68,5 +67,19 @@ public class JoueurControleur {
 		default:
 			break;
 		}
+	}
+
+	public void toucheRelache(String touchePresse) {
+		switch (touchePresse) {
+		case "q":
+			perso.setEnDeplacement(false);
+			perso.gauche();
+			break;
+		case "d":
+			perso.setEnDeplacement(false);
+			perso.droite();
+			break;
+		}
+		
 	}
 }

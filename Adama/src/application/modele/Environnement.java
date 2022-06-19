@@ -44,6 +44,12 @@ public class Environnement {
 				}
 		});
 		personnages.forEach(perso -> perso.gravite());
+		if(personnages.get(0).estMort() ) {
+			System.out.println("Game over");
+			personnages.get(0).incrementerPv(7);
+			((Joueur) personnages.get(0)).teleporterToCheckpoint();
+			System.out.println("Respawn");
+		}
 	}
 	
 	private ArrayList<Pnj> faireSpawner() {
@@ -51,14 +57,16 @@ public class Environnement {
 		double chanceSpwan = Math.random();
 		int x = (int) (Math.random()*Carte.TAILLE_BLOC*Carte.LARGEUR);
 		int y = this.carte.aMemeLeSol(x);
-		if (chanceSpwan<0.001)
+		if (chanceSpwan<0.001) {
 			vontSpawner.add(new Slime(x, y-Carte.TAILLE_BLOC*Slime.TAILLE[1], this));
-		else if (chanceSpwan<0.003)
-			vontSpawner.add(new Cerf(x, y-Carte.TAILLE_BLOC*Cerf.TAILLE[1], this));
+		}
+		else if (chanceSpwan<0.003) {
+			y = y - Carte.TAILLE_BLOC*Cerf.TAILLE[1];
+			if(this.carte.emplacement(x, y, Cerf.TAILLE)==null)
+				vontSpawner.add(new Cerf(x, y, this));
+		}
 		return vontSpawner;
 	}
-	
-	
 	
 	public void ajouter(ArrayList<Pnj> pnjs) {
 		this.personnages.addAll(pnjs);

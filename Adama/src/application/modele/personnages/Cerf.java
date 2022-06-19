@@ -27,13 +27,13 @@ public class Cerf extends Pnj {
 		if (this.estPrèsDuJoueur(Carte.TAILLE_BLOC*5, TAILLE[1]*Carte.TAILLE_BLOC)) {
 			if(this.ouSeTrouveLeJoueur()) {// si le joueur se trouve à sa droite
 				this.gauche();
-				if(!this.touchePasX(false))
-					this.sauter();
+				if(!this.touchePasX(getDirection()))
+					this.sauterEnDirection(getDirection());
 			}
 			else {
 				this.droite();
-				if(!this.touchePasX(true))
-					this.sauter();
+				if(!this.touchePasX(getDirection()))
+					this.sauterEnDirection(getDirection());
 			}
 		}
 	}
