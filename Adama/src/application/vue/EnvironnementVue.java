@@ -20,7 +20,7 @@ public class EnvironnementVue {
 		int tailleMap = (Carte.HAUTEUR) * (Carte.LARGEUR);
 		Ressource bloc;
 		for(int i=0; i<tailleMap; i++) {
-			bloc= env.getCarte().getBlockMap().get(i);
+			bloc= env.getCarte().getBlocMap().get(i);
 			this.carte.getChildren().add(new RessourceView(bloc, env));
 		}
 //		TODO ImageCursor changer l'image de la souris notaament pour placer bloc

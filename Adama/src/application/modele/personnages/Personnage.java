@@ -177,20 +177,20 @@ public abstract class Personnage {
 		int i=0;
 		if(auDessus) {
 			while (i<taille[0] && gaucheTuile) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*i+1, this.getY()-Carte.TAILLE_BLOCK*taille[1]);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*i+1, this.getY()-Carte.TAILLE_BLOC*taille[1]);
 				gaucheTuile = ( blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*taille[0]-1, this.getY()-Carte.TAILLE_BLOCK*taille[1]);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()-Carte.TAILLE_BLOC*taille[1]);
 			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		else {
 			while (i<taille[0] && gaucheTuile) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*i+1, this.getY()+Carte.TAILLE_BLOCK*taille[1]);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*i+1, this.getY()+Carte.TAILLE_BLOC*taille[1]);
 				gaucheTuile = ( blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*taille[0]-1, this.getY()+Carte.TAILLE_BLOCK*taille[1]);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()+Carte.TAILLE_BLOC*taille[1]);
 			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		return (gaucheTuile && droiteSprite);
@@ -273,20 +273,20 @@ public abstract class Personnage {
 		int i = 0;
 		if(aDroite) {
 			while (i<taille[1] && hautTuileTouchePas) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK+1, this.getY()+Carte.TAILLE_BLOCK*i);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC+1, this.getY()+Carte.TAILLE_BLOC*i);
 				hautTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois|| blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK+1, this.getY()+Carte.TAILLE_BLOCK*taille[1]-1);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC+1, this.getY()+Carte.TAILLE_BLOC*taille[1]-1);
 			basTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		else {
 			while (i<taille[1] && hautTuileTouchePas) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOCK*i);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOC*i);
 				hautTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois|| blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOCK*taille[1]-1);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOC*taille[1]-1);
 			basTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		return (hautTuileTouchePas && basTuileTouchePas);
@@ -336,7 +336,7 @@ public abstract class Personnage {
 	public final int getX() {
 		return this.xProperty.getValue();
 	}
-
+	
 	public final void setX(int val) {
 		this.xProperty.setValue(val);
 	}
@@ -584,10 +584,10 @@ public abstract class Personnage {
 	public boolean estSurLeJoueur() throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
 		Joueur joueur = this.getEnvironnement().getJoueur();
 		boolean surJoueur = false;
-		surJoueur = ((this.getX() >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOCK*joueur.getTaille()[0])
-					|| (this.getX()+Carte.TAILLE_BLOCK*this.getTaille()[0] >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOCK*joueur.getTaille()[0]))
+		surJoueur = ((this.getX() >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOC*joueur.getTaille()[0])
+					|| (this.getX()+Carte.TAILLE_BLOC*this.getTaille()[0] >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOC*joueur.getTaille()[0]))
 				&& ((this.getY() >= joueur.getY() && this.getY() <= joueur.getY()+32*joueur.getTaille()[1])
-					|| (this.getY()+Carte.TAILLE_BLOCK*this.getTaille()[1] >= joueur.getY() && this.getY() <= joueur.getY()+Carte.TAILLE_BLOCK*joueur.getTaille()[1]));
+					|| (this.getY()+Carte.TAILLE_BLOC*this.getTaille()[1] >= joueur.getY() && this.getY() <= joueur.getY()+Carte.TAILLE_BLOC*joueur.getTaille()[1]));
 		return surJoueur;
 	}
 

@@ -166,23 +166,15 @@ public class Joueur extends Personnage {
 				break;
 			}
 		}
-		if(this.getDirection()) {
-			emplacement = this.getX() + Carte.TAILLE_BLOCK;
-		}
-		else {
-			emplacement = this.getX() + Carte.TAILLE_BLOCK;
-		}
 		if(this.objetEquiper instanceof Arme) {
-			this.getEnvironnement().attaquerPersonnages(emplacement, this.getArmeEquiper().getDegat());
+			this.getEnvironnement().attaquerPersonnages(this);
 		}
-		this.objetEquiper.utiliser(emplacement);
 		
 		if (objetEquiper instanceof Terre) {
 			Carte carte = this.getEnvironnement().getCarte();
-			if(carte.getBlockMap().get(emplacement)== null) {
-				carte.getBlockMap().remove(emplacement);
-				carte.getBlockMap().add(emplacement, (Terre)this.objetEquiper);
-				//			carte.getBlockMap().set(emplacement, (Terre)this.objetEquiper);
+			if(carte.getBlocMap().get(emplacement)== null) {
+				carte.getBlocMap().remove(emplacement);
+				carte.getBlocMap().add(emplacement, (Terre)this.objetEquiper);
 			}
 		}
 	
@@ -271,10 +263,9 @@ public class Joueur extends Personnage {
 		}
 	}
 
-	public void jeter(Item item) throws ErreurInventairePlein, ErreurArmeEtOutilPasJetable {
+	public void jeter(Item item) throws ErreurArmeEtOutilPasJetable {
 		if(!this.estUneArmeOuUnOutil(item)) {
 			this.getInventaire().supprimer(item);
-			this.getEnvironnement().getCarte().getItems().ajouter(item);
 		}
 		else {
 			throw new ErreurArmeEtOutilPasJetable();

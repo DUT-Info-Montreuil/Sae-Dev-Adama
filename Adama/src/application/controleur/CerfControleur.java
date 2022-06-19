@@ -25,7 +25,7 @@ public class CerfControleur {
 	
 
 	public void agir() throws ErreurObjetIntrouvable {
-		if(cerf.estPrèsDuJoueur(Carte.TAILLE_BLOCK * 5, 32)) {
+		if(cerf.estPrèsDuJoueur(Carte.TAILLE_BLOC * 5, 32)) {
 			System.out.println("cerf : " + cerf.ouSeTrouveLeJoueur());
 			if(cerf.ouSeTrouveLeJoueur()) { // si le joueur se trouve à sa droite
 				cerfVue.orrientationSpriteGauche();
