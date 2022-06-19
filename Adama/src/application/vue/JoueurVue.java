@@ -8,11 +8,6 @@ public class JoueurVue extends PersonnageVue {
 	public JoueurVue() {
 		super("perso");
 	}
-
-
-
-	
-
 	
 	public void sautVue(int temps) {
 		if (temps<1) 

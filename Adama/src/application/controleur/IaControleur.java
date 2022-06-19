@@ -5,21 +5,14 @@ import application.vue.PersonnageVue;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class IaControleur implements ChangeListener<Pnj>{
+public class IaControleur {
 	
 	private Pnj pnj;
 	private PersonnageVue pnjSprite;
-	private boolean saut;
-	private int tempsSaut;
-
-
-
 
 	public IaControleur(Pnj pnj, PersonnageVue pnjSprite) {
 		this.pnj = pnj;
 		this.pnjSprite = pnjSprite; 
-		saut = false;
-		tempsSaut = 0;
 	}
 
 	public Pnj getPnj() {
@@ -30,30 +23,11 @@ public class IaControleur implements ChangeListener<Pnj>{
 		return this.pnjSprite;
 	}
 	
-	public boolean isSaut() {
-		return saut;
-	}
-
-	public void setSaut(boolean saut) {
-		this.saut = saut;
-	}
-
-	public int getTempsSaut() {
-		return tempsSaut;
-	}
-	
-	public void incremterTempsSaut() {
-		this.tempsSaut+=1;
-	}
-	
-	public void reinisialiseTempsSaut() {
-		this.tempsSaut = 0;
-	}
-
-
-	@Override
-	public void changed(ObservableValue<? extends Pnj> observable, Pnj oldValue, Pnj newValue) {
-
-		
+	public void orienterPnjSprite() {
+		if (this.pnj.getDirection())//Orienter vers la droite
+			this.pnjSprite.orrientationSpriteDroite();
+		else
+			this.pnjSprite.orrientationSpriteGauche();
+			
 	}
 }

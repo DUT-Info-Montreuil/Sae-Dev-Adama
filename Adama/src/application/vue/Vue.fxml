@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane onKeyPressed="#touchePresse"
+<BorderPane onKeyPressed="#touchePresse" onKeyReleased="#toucheRelache"
 	xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="application.controleur.Controleur">
 	<center>

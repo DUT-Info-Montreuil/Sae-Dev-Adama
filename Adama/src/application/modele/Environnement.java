@@ -44,6 +44,12 @@ public class Environnement {
 				}
 		});
 		personnages.forEach(perso -> perso.gravite());
+		if(personnages.get(0).estMort() ) {
+			System.out.println("Game over");
+			personnages.get(0).incrementerPv(7);
+			((Joueur) personnages.get(0)).teleporterToCheckpoint();
+			System.out.println("Respawn");
+		}
 	}
 	
 	private ArrayList<Pnj> faireSpawner() {
