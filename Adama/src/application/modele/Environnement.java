@@ -3,6 +3,8 @@ package application.modele;
 import java.io.IOException;
 
 import java.util.ArrayList;
+
+import application.modele.armes.Arme;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.exception.TailleMapException;
@@ -31,7 +33,7 @@ public class Environnement {
 	}
 	
 	public void tourDejeu() {
-		if (personnages.size()<200)
+		if (personnages.size()<50)
 			ajouter(faireSpawner());
 		personnages.forEach(pnj -> {
 			if (pnj instanceof Pnj)
@@ -67,8 +69,6 @@ public class Environnement {
 		return vontSpawner;
 	}
 	
-	
-	
 	public void ajouter(ArrayList<Pnj> pnjs) {
 		this.personnages.addAll(pnjs);
 	}
@@ -83,16 +83,6 @@ public class Environnement {
 
 	public void supprimer(int indice) {
 		this.personnages.remove(indice);
-	}
-
-
-	public Personnage emplacement(int x, int y) {
-		int indiceDansMap = (x/Carte.HAUTEUR + (y/Carte.HAUTEUR * Carte.LARGEUR));
-		return this.personnages.get(indiceDansMap);
-	}
-
-	public Personnage emplacement(int indice) {
-		return this.personnages.get(indice);
 	}
 
 	public Joueur getJoueur() {
@@ -112,11 +102,56 @@ public class Environnement {
 		return this.carte;
 	}
 
-	public void attaquerPersonnages(int lieu, int degat) throws ErreurInventairePlein {
-		this.personnages.get(lieu).decrementerPv(degat);
-		if (this.personnages.get(lieu).estMort()) {
-			this.personnages.get(lieu).meurt();
-			this.supprimer(lieu);
+	public void attaquerPersonnages(Joueur attaquant) throws ErreurInventairePlein {
+		Personnage perso;
+		Arme armePorte = ((Arme)attaquant.getObjetEquiper());
+		boolean touche = false;
+		int xMin;
+		int xMax;
+		for (int i=this.personnages.size()-1; i>=0; i--) {
+			perso = this.personnages.get(i);
+			int j =0;
+			while (!touche && perso.getTaille()[0]>j) {
+				if (attaquant.getDirection()) {
+					xMin = attaquant.getX() + Carte.TAILLE_BLOC + 1;
+					xMax = xMin + armePorte.getPorter();
+					if (perso.getX()+j*Carte.TAILLE_BLOC<xMin && perso.getX()+j*Carte.TAILLE_BLOC>xMax)
+						touche = true;
+				}
+				else {
+					xMin = attaquant.getX() - 1;
+					xMax = xMin - armePorte.getPorter();
+					if (perso.getX()+j*Carte.TAILLE_BLOC>xMin && perso.getX()+j*Carte.TAILLE_BLOC<xMax)
+						touche = true;
+				}
+				j++;
+			}
+			if (touche)
+				perso.decrementerPv(armePorte.getDegat());
+			if (perso.estMort()) {
+				perso.meurt();
+				this.supprimer(i);
+			}
+			touche = false;
 		}
 	}
+
+//	public ArrayList<Personnage> emplacementPerso(int x, int y, int[] taille) {
+//		ArrayList<Personnage> personnagesTouches = new ArrayList<>();
+//		int tailleBloc = Carte.TAILLE_BLOC;
+//		boolean toucheX;
+//		boolean toucheY;
+//		for (Personnage perso : this.personnages) {
+//			toucheX = 	(perso.getX()+perso.getTaille()[0]*tailleBloc)>=x && perso.getX()<=x
+//					||	(perso.getX()+perso.getTaille()[0]*tailleBloc)<=x && perso.getX()>=x;
+//
+//			toucheY = 	(perso.getY()+perso.getTaille()[1]*tailleBloc)>=y && perso.getY()<=y
+//					||	(perso.getY()+perso.getTaille()[1]*tailleBloc)<=y && perso.getY()>=y;
+//
+//			if (toucheX && toucheY)
+//				personnagesTouches.add(perso);				
+//		}
+//		
+//		return personnagesTouches;
+//	}
 }

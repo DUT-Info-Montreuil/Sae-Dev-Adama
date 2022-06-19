@@ -412,7 +412,7 @@ public abstract class Personnage {
 	public final int getX() {
 		return this.xProperty.getValue();
 	}
-
+	
 	public final void setX(int val) {
 		this.xProperty.setValue(val);
 	}
@@ -455,12 +455,6 @@ public abstract class Personnage {
 	
 	public boolean estEnDehorsMap(int valX, int valY) {
 		return this.getX() + valX < 0 || this.getX() + valX > 1890 ;
-	}
-
-
-	public boolean estEnLaire() {
-		int[] taille = {1,2};//provisoire
-		return this.environnement.getCarte().emplacement(this.getX(), this.getY(), taille)==null;
 	}
 
 	public void setVitesseDeplacement(int vitesseDeplacement) {
@@ -532,19 +526,7 @@ public abstract class Personnage {
 			return  false ;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	/**
 	 * Vérifie si le joueur se trouve dans un rayon de val blocs autour du personnage, val étant la varaiable passé en paramètre
 	 * @param val : valeur correspondant au rayon du cercle qui définit si le joueur est à portee
@@ -584,8 +566,6 @@ public abstract class Personnage {
 		
 		return  false;
 	}
-	
-	
 	
 	public boolean estPrèsDunPerso(int valX, int valY, Personnage perso) throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
 		if (this.getX() - valX <= perso.getX()  && this.getX() >= perso.getX()){

@@ -39,12 +39,12 @@ public class Arc extends Arme {
 			fleche.tirer(direction);
 			lieu = fleche.getX();
 			distance += this.fleche.getVitesse();
-			if (environnement.emplacement(lieu) instanceof Personnage)
-				environnement.attaquerPersonnages(lieu, this.fleche.getDegat());
-			if (environnement.emplacement(lieu-largeur) instanceof Personnage)
-				environnement.attaquerPersonnages(lieu-largeur, this.fleche.getDegat());
-			if (environnement.emplacement(lieu+largeur) instanceof Personnage)
-				environnement.attaquerPersonnages(lieu+largeur, this.fleche.getDegat());
+//			if (environnement.emplacement(lieu) instanceof Personnage)
+//				environnement.attaquerPersonnages(lieu, this.fleche.getDegat());
+//			if (environnement.emplacement(lieu-largeur) instanceof Personnage)
+//				environnement.attaquerPersonnages(lieu-largeur, this.fleche.getDegat());
+//			if (environnement.emplacement(lieu+largeur) instanceof Personnage)
+//				environnement.attaquerPersonnages(lieu+largeur, this.fleche.getDegat());
 		}
 		
 		this.fleche.detruire();
@@ -55,11 +55,6 @@ public class Arc extends Arme {
 	public String toString() {
 		return "Arc";
 	}
-	
-	public void utiliser() {
-		
-	}
-
 
 	@Override
 	public void utiliser(int val) {

@@ -2,6 +2,7 @@ package application.modele;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.TailleMapException;
 import application.modele.ressources.Bois;
@@ -166,13 +167,8 @@ public class Carte {
 		return null;
 	}
 
-	public ObservableList<Ressource> getBlockMap() {
+	public ObservableList<Ressource> getBlocMap() {
 		return blocMap;
 	}
-	
-	public Inventaire getItems() {
-		return items;
-	}
-	
 }
 

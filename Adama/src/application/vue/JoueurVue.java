@@ -15,4 +15,12 @@ public class JoueurVue extends PersonnageVue {
 		else if (temps==10) 
 			this.getSprite().setImage(new Image("ressource/perso.png"));
 	}
+	
+	public void attaqueEpee() {
+		this.setSprite("ressource/persoEpeeLever.png");
+	}
+	
+	public void epeeRanger() {
+		this.setSprite("ressource/persoEpeeRanger.png");
+	}
 }

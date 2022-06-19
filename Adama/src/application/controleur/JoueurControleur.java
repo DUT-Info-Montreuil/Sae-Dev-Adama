@@ -45,20 +45,7 @@ public class JoueurControleur {
 				break;
 			case "s":
 				break;
-				
-		
-			
-			case "c":
-				Epee epee = new Epee();
-				perso.equiper(epee);
-				persoVue.setSprite("ressource/persoEpeeRanger.png");
-				break;
-				
-			case "v":
-				persoVue.setSprite("ressource/persoEpeeLever.png");
-				
-	
-			}	
+		}
 	}
 
 	public void sourisPresse(String click, int emplacement) {

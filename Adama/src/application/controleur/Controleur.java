@@ -103,10 +103,10 @@ public class Controleur implements Initializable{
 		Ressource cible = env.getCarte().emplacement(x, y);
 		if (cible==null) {
 			int indiceDansMap = (x/Carte.TAILLE_BLOC) + ((y/Carte.TAILLE_BLOC) * Carte.LARGEUR);
-			persoControleur.sourisPresse(click, indiceDansMap);
+			persoControleur.sourisPresse(click, indiceDansMap);;
 		}
 		else {
-			persoControleur.sourisPresse(click, env.getCarte().getBlockMap().indexOf(cible));//a voir si problème avec click sur bouton
+			persoControleur.sourisPresse(click, env.getCarte().getBlocMap().indexOf(cible));
 		}
 		//		}
 	}
@@ -241,7 +241,6 @@ public class Controleur implements Initializable{
 					}
 				}
 			}});
-		
 
 	//////////Personnages dans l'environnement
 		listPersonnageListener = (pc -> {
@@ -274,7 +273,7 @@ public class Controleur implements Initializable{
 			}});
 
 	//////////Ajout des listener aux deux liste de l'environement
-		env.getCarte().getBlockMap().addListener(listResssourceListener);
+		env.getCarte().getBlocMap().addListener(listResssourceListener);
 		env.getPersonnages().addListener(listPersonnageListener);
 
 		env.initJeu();
@@ -283,21 +282,26 @@ public class Controleur implements Initializable{
 ///////////Création du menu
 		
 	////////Ajout des PV et bind au Sprite du Joueur
-		
+
 		nbPVResant.textProperty().bind(perso.pvProperty().asString());
 		invControleur = new InventaireControleur(inventaire);
-		perso.getInventaire().getItems().addListener(invControleur);		
+		perso.getInventaire().getItems().addListener(invControleur);
+
 		Carte carte = env.getCarte();
 		try {
-			perso.getInventaire().ajouter(new Hache(carte, perso));
-			perso.getInventaire().ajouter(new Pelle(carte, perso));
-			perso.getInventaire().ajouter(new Pioche(carte, perso));
+			perso.getInventaire().ajouter(new Hache(carte,perso));
+			perso.getInventaire().ajouter(new Pelle(carte,perso));
+			perso.getInventaire().ajouter(new Pioche(carte,perso));
 		} catch (ErreurInventairePlein e) {
 			System.out.println("Plein");
 		}
+		/*
+		 * Test
+		 */
 
-
-		////////////Gameloop
+////////////Lancement du Jeu
+	
+	////////////Gameloop
 		initAnimation();
 		gameLoop.play();
 	}

@@ -20,14 +20,14 @@ public class RessourceView extends ImageView {
 	public RessourceView(Ressource res, Environnement env) {
 		this.resource=res;
 		this.env=env;
-		choixTuile(blockPourVal(this.env.getCarte().getBlockMap().indexOf(resource), Carte.LARGEUR));
+		choixTuile(blockPourVal(this.env.getCarte().getBlocMap().indexOf(resource), Carte.LARGEUR));
 	}
 	
 	public int blockPourVal(int indice, int largeur) {
 		int val;
 		if (resource==null)
 			val=0;
-		else if (resource instanceof Terre && indice>largeur && env.getCarte().getBlockMap().get(indice-largeur)==null)
+		else if (resource instanceof Terre && indice>largeur && env.getCarte().getBlocMap().get(indice-largeur)==null)
 			val=1;				
 		else if (resource instanceof Pierre)
 			val=3;

@@ -8,8 +8,6 @@ import application.modele.ressources.Pierre;
 
 public class Slime extends Ennemis {
 
-	
-
 	private static final int PV = 15;
 	public static final int[] TAILLE = {1,1};
 	private static final int DEGATS = 5;
