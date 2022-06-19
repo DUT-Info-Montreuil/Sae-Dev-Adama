@@ -7,12 +7,21 @@ import application.modele.effet.Effet;
 import application.modele.effet.Ralentir;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
 import application.modele.Carte;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Plante;
 import application.modele.ressources.Ressource;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 /**
@@ -58,6 +67,9 @@ public abstract class Personnage {
 		compteur++;
 		this.direction=false;
 		this.enDeplacement=false;
+		this.effets = FXCollections.observableArrayList() ;
+		for (int i=0; i<5; i++)
+			this.effets.add(null);
 	}
 
 	
@@ -78,6 +90,9 @@ public abstract class Personnage {
 		compteur++;
 		this.direction=false;
 		this.enDeplacement=false;
+		this.effets = FXCollections.observableArrayList() ;
+		for (int i=0; i<5; i++)
+			this.effets.add(null);
 	}
 
 	public Personnage(int pv, int x, int y, int vitesseDeplacement, Environnement environnement,
@@ -96,6 +111,9 @@ public abstract class Personnage {
 		compteur++;
 		this.direction=false;
 		this.enDeplacement=false;
+		this.effets = FXCollections.observableArrayList() ;
+		for (int i=0; i<5; i++)
+			this.effets.add(null);
 	}
 
 
