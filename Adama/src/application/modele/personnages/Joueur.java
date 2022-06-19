@@ -1,36 +1,35 @@
 package application.modele.personnages;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import application.modele.exception.ErreurPasDobjetCraftable;
 import application.modele.outils.Sceau;
-import application.modele.potions.AntiPoison;
 import application.modele.potions.Potion;
 import application.modele.potions.PotionDegat;
 import application.modele.potions.PotionVie;
 import application.modele.potions.PotionVitesse;
 import application.modele.Carte;
-import application.modele.Checkpoint;
 import application.modele.Environnement;
 import application.modele.Inventaire;
 import application.modele.Item;
-import application.modele.armes.Arc;
 import application.modele.armes.Arme;
 import application.modele.armes.Epee;
-import application.modele.armes.Fleche;
 import application.modele.armes.Poing;
 import application.modele.exception.ErreurArmeEtOutilPasJetable;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.exception.ErreurObjetInvalide;
+import application.modele.exception.ErreurObjetCraftable;
+import application.modele.potions.Remede;
+import application.modele.ressources.Venin;
+import application.modele.ressources.Bois;
+import application.modele.ressources.Pierre;
+import application.modele.ressources.PlanteDeNike;
+import application.modele.ressources.PlanteHercule;
+import application.modele.ressources.PlanteMedicinale;
+import application.modele.ressources.Ressource;
+import application.modele.ressources.Terre;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import application.modele.ressources.Ressource;
-import application.modele.ressources.Terre;
 
 public class Joueur extends Personnage {
 
@@ -144,17 +143,20 @@ public class Joueur extends Personnage {
 		this.setVitesseDeplacement(VITESSE_MARCHE);
 	}
 
+	public void accroupie() {
+		this.setVitesseDeplacement(VITESSE_ACCROUPIE);
+	}
 
 	public void courrir() {
 		this.setVitesseDeplacement(VITESSE_COURRIR);
 	}
-	
+
 	public void utiliserMain(int emplacement) throws ErreurInventairePlein, ErreurArmeEtOutilPasJetable, ErreurObjetIntrouvable {
 		if (objetEquiper instanceof Potion) {
 			String potion = objetEquiper.getClass().getSimpleName();
 			switch (potion) {
 			case "PotionVie":
-				incrementerPv(PotionVie.getNombrePvRestaurer());
+				
 				break;
 			case "PotionVitesse":
 //				super.Deplacement(objetEquiper.getDuree());
@@ -165,12 +167,7 @@ public class Joueur extends Personnage {
 				break;
 			}
 		}
-		if(this.getDirection()) {
-			emplacement = this.getX() + Carte.TAILLE_BLOC;
-		}
-		else {
-			emplacement = this.getX() + Carte.TAILLE_BLOC;
-		}
+
 		if(this.objetEquiper instanceof Arme) {
 			this.getEnvironnement().attaquerPersonnages(emplacement, this.getArmeEquiper().getDegat());
 		}
@@ -189,12 +186,7 @@ public class Joueur extends Personnage {
 		}
 	
 	}
-
-
-	public void accroupie() {
 	
-	}
-
 	public void setModeDeplacement() { // TODO trouver un meilleure nom 
 		if(this.getVitesseDeplacement() != VITESSE_COURRIR) {
 			this.setVitesseDeplacement(VITESSE_COURRIR);
@@ -223,71 +215,104 @@ public class Joueur extends Personnage {
 		}
 	}
 
-
-
-	public Item craft (ArrayList<Item> items) throws ErreurPasDobjetCraftable, ErreurObjetInvalide { 
-		String pierre = "Pierre";
-		String bois = "Bois";
-		String planteDeNike = "PlanteDeNike";
-		String planteHercule = "¨PlanteHercule";
-		String planteMedicinale = "PlanteMedicinale";
-		String fils = "Fils";
-		String antiPoison = "AntiPoison";
-		Sceau PossedeSeau = null;
-		String seau = null;
-		int indiceSaut = items.indexOf(PossedeSeau);
-		if(indiceSaut != -1);
-			PossedeSeau = (application.modele.outils.Sceau) super.getInventaire().getItems().get(indiceSaut);
-			if(PossedeSeau.EstRempli())
-				seau = "Seau";
-		String plante = "Plante";
-
-		Item item;
-		Map<String, Integer> recette = new HashMap<String, Integer>();
-
-		recette.put(pierre, 0); 
-		recette.put(bois, 0);
-		recette.put(plante, 0);
-
-		int k = 0;
-
-		try {
-			for(k = 0 ; k < items.size() ; k ++) { 
-				recette.put(items.get(k).getClass().getSimpleName(), recette.get(items.get(k).getClass().getSimpleName()) + 1);
+	/**
+	 * Cherche dans l'inventaire du joueur si il a les materiaux necessaire au caft
+	 * Si c'est le cas on ajoute l'objet dans l'inventaire et on le supprime les matériaux
+	 * sinon on envoie l'erreur ErreurObjetCraftable.
+	 * @param ObjetAFabriquer
+	 * @throws ErreurObjetCraftable Si le joueur n'a pas les ressources neccessaire au craft
+	 * @throws ErreurInventairePlein
+	 * @throws ErreurObjetIntrouvable
+	 */
+	public void craft (String ObjetAFabriquer) throws ErreurObjetCraftable, ErreurInventairePlein, ErreurObjetIntrouvable {
+		Inventaire inventaire = super.getInventaire();
+		switch (ObjetAFabriquer) {
+		case "Epee":
+			Bois bois = (Bois) inventaire.memeRessource(new Bois(-1), false);
+			Pierre pierre = (Pierre) inventaire.memeRessource(new Pierre(-1), false);
+			if(bois == null || pierre == null || bois.getNombre()<2 && pierre.getNombre()<1) {
+				throw new ErreurObjetCraftable();
 			}
-		}catch (java.lang.NullPointerException e) { 
-			throw new ErreurObjetInvalide(items.get(k));
+			else {
+				inventaire.ajouter(new Epee());
+				inventaire.supprimer(bois);
+				inventaire.supprimer(bois);
+				inventaire.supprimer(pierre);
+			}
+			break;
+		case "Sceau":
+			bois = (Bois) inventaire.memeRessource(new Bois(-1), false);
+			if(bois == null || bois.getNombre()<5) {
+				throw new ErreurObjetCraftable();
+			}
+			else {
+				inventaire.ajouter(new Sceau(getEnvironnement().getCarte(),this));
+				inventaire.supprimer(bois);
+				inventaire.supprimer(bois);
+				inventaire.supprimer(bois);
+				inventaire.supprimer(bois);
+				inventaire.supprimer(bois);
+			}
+			break;
+		case "PotionVie":
+			Sceau sceau = (Sceau) inventaire.memeRessource(new Sceau(getEnvironnement().getCarte(),this), false);
+			PlanteMedicinale med = (PlanteMedicinale) inventaire.memeRessource(new PlanteMedicinale(-1), false);
+			if(sceau == null || med == null || !sceau.EstRempli()||med.getNombre()<3) {
+				throw new ErreurObjetCraftable();
+			}
+			else {
+				inventaire.ajouter(new PotionVie(this));
+				inventaire.supprimer(med);
+				inventaire.supprimer(med);
+				inventaire.supprimer(med);
+				sceau.vider();
+			}
+			break;
+		case "PotionDegat":
+			Sceau s = (Sceau) inventaire.memeRessource(new Sceau(getEnvironnement().getCarte(),this), false);
+			PlanteHercule her = (PlanteHercule) inventaire.memeRessource(new PlanteHercule(-1),false);
+			if(s == null || her == null || !s.EstRempli()||her.getNombre()<2) {
+				throw new ErreurObjetCraftable();
+			}
+			else {
+				inventaire.ajouter(new PotionDegat(this));
+				inventaire.supprimer(her);
+				inventaire.supprimer(her);
+				s.vider();
+			}
+			break;
+
+		case "PotionVitesse":
+			Sceau sc = (Sceau) inventaire.memeRessource(new Sceau(getEnvironnement().getCarte(),this), false);
+			PlanteDeNike nike = (PlanteDeNike) inventaire.memeRessource(new PlanteDeNike(-1), false);
+			if(sc == null || nike == null || !sc.EstRempli()||nike.getNombre()<3) {
+				throw new ErreurObjetCraftable();
+			}
+			else {
+				inventaire.ajouter(new PotionVitesse(this));
+				inventaire.supprimer(nike);
+				inventaire.supprimer(nike);
+				inventaire.supprimer(nike);
+				sc.vider();
+			}
+			break;
+
+		case "Remede":
+			Venin venin = (Venin) inventaire.memeRessource(new Venin(-1), false);
+			PlanteMedicinale medicinal = (PlanteMedicinale) inventaire.memeRessource(new PlanteMedicinale(-1), false);
+			if(venin == null || medicinal == null || venin.getNombre()<1 ||medicinal.getNombre()<3) {
+				throw new ErreurObjetCraftable();
+			}
+			else {
+				inventaire.ajouter(new Remede(this));
+				inventaire.supprimer(medicinal);
+				inventaire.supprimer(medicinal);
+				inventaire.supprimer(venin);
+			}
+			break;
+		default:
+			break;
 		}
-
-		if(recette.get(bois) == 3 && recette.get(plante) == 1) {  // 3 bois et 1 plante crée un arc
-			item = new Arc(this.getInventaire()); // TODO revoir recette pour l'arc (remplacer la plante part de la ficelle)
-		}
-
-		else if(recette.get(bois) == 2 && recette.get(pierre) == 1) { // 2 bois et 1 pierre crée une épée
-			item = new Epee();
-		}
-
-
-		else if(recette.get(bois) == 1 && recette.get(pierre) == 1) { // 1 de bois et 1 pierre crée une flèche
-			item = new Fleche();
-		}
-		else if(recette.get(bois) == 5)
-			return new Sceau(getEnvironnement().getCarte(), this);
-
-		else if (seau != null && recette.get(planteDeNike) == 2)
-			return new PotionVitesse();
-		else if (seau != null && recette.get(planteHercule) == 2)
-			return new PotionDegat();
-
-		else if (seau != null && recette.get(planteMedicinale) == 3)
-			return new PotionVie();
-		else if (seau != null && recette.get(planteMedicinale) == 2 && recette.get(antiPoison) == 1)
-			return new AntiPoison();
-		else {
-			throw new ErreurPasDobjetCraftable();
-		}
-
-		return item;
 	}
 
 	public void jeter(Item item) throws ErreurArmeEtOutilPasJetable, ErreurObjetIntrouvable {
@@ -326,9 +351,5 @@ public class Joueur extends Personnage {
 		else {
 			return this.POING;
 		}
-	}
-	
-	public  void agir() throws ErreurObjetIntrouvable{
-		
 	}
 }

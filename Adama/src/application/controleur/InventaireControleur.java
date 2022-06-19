@@ -39,6 +39,7 @@ public class InventaireControleur implements ListChangeListener<Item> {
 				Label nombre = (Label) tuile.getChildren().get(1);
 				nombre.setVisible(true);
 				if(ajout instanceof Sceau) {
+					nombre.setText("1");
 					ChangeListener<Boolean> ecouteurDeSceau =  ((obs,old,nouv)-> {
 						if(((Sceau) ajout).EstRempli())
 							b.setImage(new Image("ressource/sceau_plein.png"));
@@ -51,6 +52,9 @@ public class InventaireControleur implements ListChangeListener<Item> {
 				else if(ajout instanceof Ressource) {
 					nombre.textProperty().bind(((Ressource) ajout).nombreProperty().asString());
 
+				}
+				else {
+					nombre.setText("1");
 				}
 				b.setImage(image);
 				Inventaire inventaire = new Inventaire(20);
@@ -71,6 +75,10 @@ public class InventaireControleur implements ListChangeListener<Item> {
 						if(objet instanceof Ressource) {
 							nombre.textProperty().unbind();
 							nombre.textProperty().bind(((Ressource) objet).nombreProperty().asString());
+						}
+						else {
+							nombre.textProperty().unbind();
+							nombre.setText("1");
 						}
 					}
 					else {

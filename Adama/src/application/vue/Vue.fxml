@@ -22,6 +22,257 @@
 				<TilePane fx:id="carte" onMouseClicked="#sourisPresse"
 					prefColumns="60" style="-fx-background-color: #028ED4;">
 				</TilePane>
+            <TilePane fx:id="craft" hgap="8.0" layoutX="-102.0" layoutY="-310.0" prefColumns="4" prefRows="6" prefTileHeight="64.0" prefTileWidth="64.0" style="-fx-background-color: #808080;" translateX="700.0" translateY="500.0" vgap="8.0" visible="false">
+               <children>
+                  <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="Epee" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/epee.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;">
+                     <children>
+                        <ImageView id="1" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane mouseTransparent="true" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="3" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/pierreIcone.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="1" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="1" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/boisIcone.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="2" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="Sceau" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/sceau_vide.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="5" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="6" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/boisIcone.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="BOTTOM_LEFT" layoutX="10.0" layoutY="10.0" onMouseClicked="#equiper" text="5" textAlignment="CENTER" textFill="WHITE" translateX="45.0" translateY="35.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER" />
+                  <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="PotionVie" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/potionVie.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="9" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="10" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/planteMedicinaleIcone.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="3" textAlignment="CENTER" textFill="WHITE" translateX="52.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="11" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/sceau_plein.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="1" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="PotionDegat" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/potionDegat.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="13" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="14" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/planteHerculeIcone.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="2" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="15" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/sceau_plein.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="1" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="PotionVitesse" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/potionVitesse.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/planteNikéIcone.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="2" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;">
+                     <children>
+                        <ImageView fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/sceau_plein.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="1" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                   <Pane onMouseClicked="#craft" style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="Remede" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/potionAntipoison.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="9" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/resultat.png" />
+                           </image></ImageView>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="10" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/planteMedicinaleIcone.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="2" textAlignment="CENTER" textFill="WHITE" translateX="52.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane style="-fx-background-color: #bbbbbb;" TilePane.alignment="CENTER">
+                     <children>
+                        <ImageView id="11" fitHeight="60" fitWidth="60" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../ressource/venin.png" />
+                           </image></ImageView>
+                        <Label alignment="BOTTOM_LEFT" onMouseClicked="#equiper" text="1" textAlignment="CENTER" textFill="WHITE" translateX="50.0" translateY="45.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </TilePane>
 				<HBox prefHeight="400.0" prefWidth="400.0" spacing="10.0">
 					<children>
 						<Button alignment="TOP_RIGHT"

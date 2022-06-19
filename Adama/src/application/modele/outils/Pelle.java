@@ -1,10 +1,9 @@
 package application.modele.outils;
 
 import application.modele.Carte;
-import application.modele.Environnement;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.personnages.Joueur;
-import application.modele.ressources.Ressource;
+import application.modele.ressources.Plante;
 import application.modele.ressources.Terre;
 
 public class Pelle extends Outil {
@@ -30,5 +29,7 @@ public class Pelle extends Outil {
 	public void utiliser(int lieu) throws ErreurInventairePlein {
 		if (super.getCarte().emplacement(lieu) instanceof Terre)
 			super.getJoueur().getInventaire().ajouter(super.getCarte().attaquerBloc(lieu, DEGATS));
+		if (super.getCarte().emplacement(lieu-Carte.LARGEUR) instanceof Plante)
+			super.getJoueur().getInventaire().ajouter(super.getCarte().attaquerBloc(lieu-Carte.LARGEUR, DEGATS));
 	}
 }

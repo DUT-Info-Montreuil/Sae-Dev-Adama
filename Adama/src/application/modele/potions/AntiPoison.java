@@ -1,9 +1,11 @@
 package application.modele.potions;
 
-public class AntiPoison implements Potion {
+import application.modele.personnages.Joueur;
 
-	public AntiPoison() {
-		
+public class AntiPoison extends Potion {
+
+	public AntiPoison(Joueur joueur) {
+		super(joueur);
 	}
 
 	@Override

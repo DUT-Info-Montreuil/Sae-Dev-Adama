@@ -3,8 +3,7 @@ package application.modele.personnages;
 import application.modele.Environnement;
 import application.modele.Inventaire;
 import application.modele.exception.ErreurInventairePlein;
-import application.modele.ressources.AntiVenin;
-import application.modele.ressources.Bois;
+import application.modele.ressources.Venin;
 import application.modele.ressources.Fils;
 
 public class Araignee extends Ennemis {
@@ -25,7 +24,7 @@ public class Araignee extends Ennemis {
 		if(lootFils <= TAUX_APPARITION_FILS)
 			super.getInventaire().ajouter(new Fils(0));
 		if(lootANTIPOISON <= TAUX_APPARITION_ANTIVENIN)
-			super.getInventaire().ajouter(new AntiVenin(1));
+			super.getInventaire().ajouter(new Venin(1));
 	}
 
 	

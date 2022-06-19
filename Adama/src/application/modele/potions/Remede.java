@@ -2,18 +2,14 @@ package application.modele.potions;
 
 import application.modele.personnages.Joueur;
 
-public class PotionVie extends Potion {
-	
-	public static final int NOMBRE_PV_RESTAURER = 3;
-	
-	public PotionVie(Joueur joueur) {
+public class Remede extends Potion {
+
+	public Remede(Joueur joueur) {
 		super(joueur);
 	}
 
-	@Override
 	public void utiliser(int val) {
-		super.getJoueur().incrementerPv(NOMBRE_PV_RESTAURER);
+		getJoueur().SupprimerEffet(0);
 		getJoueur().getInventaire().getItems().remove(this);
 	}
-
 }
