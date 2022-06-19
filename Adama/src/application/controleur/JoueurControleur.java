@@ -3,14 +3,12 @@ package application.controleur;
 import application.modele.exception.ErreurArmeEtOutilPasJetable;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
-import application.modele.armes.Epee;
 import application.modele.personnages.Joueur;
 import application.vue.JoueurVue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 
 public class JoueurControleur {
 
@@ -54,7 +52,6 @@ public class JoueurControleur {
 			try {
 					perso.utiliserMain(emplacement);
 				} catch (ErreurArmeEtOutilPasJetable e) {
-					Label message = new Label(e.getMessage());
 					Alert a = new Alert(AlertType.WARNING, e.getMessage(), ButtonType.CLOSE);
 					a.setTitle("Arme et outils pas Jetable");
 					a.setHeaderText("Vous ne pouvez pas jeter ça");
@@ -64,9 +61,7 @@ public class JoueurControleur {
 				} catch (ErreurObjetIntrouvable e) {
 					
 				} catch (ErreurInventairePlein e) {
-				// TODO Alert
 				if (!messageDejaVu) {
-					Label message = new Label(e.getMessage());
 					Alert a = new Alert(AlertType.WARNING, e.getMessage(), ButtonType.CLOSE);
 					a.setTitle("Inventaire Plein");
 					a.setHeaderText("Votre Inventaire est plein");
