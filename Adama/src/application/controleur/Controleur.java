@@ -306,6 +306,7 @@ public class Controleur implements Initializable{
 		gameLoop.setCycleCount(Timeline.INDEFINITE);
 		KeyFrame kf = new KeyFrame(Duration.seconds(0.017),
 				(ev -> {
+					env.tourDejeu();
 					//Au bout de temps de remplissage si le sceau est vide il se rempli
 					if (sceau != null && temps%Sceau.TEMPS_REMPLISSAGE==0 && !sceau.EstRempli() && temps!=0) {
 						sceau.remplir();

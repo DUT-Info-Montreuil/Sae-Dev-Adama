@@ -21,8 +21,7 @@ import javafx.collections.ObservableList;
  * Elle a trois attributs qui sont ecoutables : pvProperty, xProperty, yProperty
  * Elle a une vitesse de déplacement, une hauteur de saut, un environement, une taille(tab[0]=tailleEnX, tab[1]=tailleEnY)
  * Et un inventaire(les pnj en ont également un qui aura les drops que l'on récupérera en les tuant)
- * @author jberguig
- *
+ * 
  */
 public abstract class Personnage {
 
@@ -107,8 +106,6 @@ public abstract class Personnage {
 		for (int i=0; i<5; i++)
 			this.effets.add(null);
 	}
-
-
 
 	public void setCheckpoint(Checkpoint checkpoint) {
 		this.checkpoint = checkpoint;
