@@ -11,5 +11,4 @@ public class AntiVenin extends Ressource {
 	public void utiliser(int val) {
 		
 	}
-
 }

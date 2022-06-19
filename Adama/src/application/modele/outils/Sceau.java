@@ -1,6 +1,7 @@
 package application.modele.outils;
 
-import application.modele.Environnement;
+import application.modele.Carte;
+import application.modele.personnages.Joueur;
 import application.modele.ressources.Eau;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -11,15 +12,15 @@ public class Sceau extends Outil {
 	private final static int TEMPS_REMPLISSAGE = 17647; //correspond à environ 5 minutes
 	private Eau eau;
 
-	public Sceau(Environnement env) {
-		super(env, TEMPS_REMPLISSAGE);
+	public Sceau(Carte carte, Joueur joueur) {
+		super(carte, joueur, TEMPS_REMPLISSAGE);
 		this.estRempli = new SimpleBooleanProperty(false);
 		eau = null;
 	}
 
 	@Override
 	public void utiliser(int val) {
-		if(EstRempli())
+		if(!EstRempli())
 			this.vider();
 	}
 
@@ -52,7 +53,5 @@ public class Sceau extends Outil {
 
 	public void setEstRempli(boolean a) {
 		estRempli.set(a);
-	}
-	
+	}	
 }
-

@@ -13,7 +13,7 @@ public class PlanteDeNike extends Plante {
 
 	@Override
 	public void utiliser(int val) {
-		
+
 	}
 
 }

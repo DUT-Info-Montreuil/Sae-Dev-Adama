@@ -1,31 +1,20 @@
 package application.modele.personnages;
 
-import java.io.IOException;
-
 import application.modele.Environnement;
+import application.modele.Inventaire;
 import application.modele.exception.ErreurObjetIntrouvable;
 
 public abstract class Ennemis extends Pnj{
 	private int degat;
 
-	public Ennemis(int pv, int x, int y, int vitesseDeplacement, Environnement environnement, int[] taille, int degat) {
-		super(pv, x, y, vitesseDeplacement, environnement, taille);
+	public Ennemis(int pv, int x, int y, int vitesseDeplacement, Environnement environnement, Inventaire inventaire, int hauteurSaut, int[] taille, int degat) {
+		super(pv, x, y, vitesseDeplacement, environnement, inventaire, hauteurSaut, taille);
 		this.degat = degat;
 	}
 
-	public Ennemis(Environnement environnement,int[] taille, int degat) {
-		super(10, 10, 10, 10, environnement, taille);
-		this.degat = degat;
-	}
+	
 
-	public Ennemis(int x, int y,int vitesseDeplacement,Environnement environnement, int[] taille) {
-
-
-		super(10, x, y, 10, environnement, taille);
-
-		this.degat = 1;
-	}
-
+	
 	public int getDegat() {
 		return this.degat;
 	}

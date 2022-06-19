@@ -22,6 +22,12 @@ public class Inventaire {
 		this.items = FXCollections.observableArrayList();
 		this.tailleMaxProperty = new SimpleIntegerProperty(taille);
 	}
+	
+	public Inventaire(Item item) {
+		this.items = FXCollections.observableArrayList();
+		this.tailleMaxProperty = new SimpleIntegerProperty(1);
+		this.items.add(item);
+	}
 
 	public ObservableList<Item> getItems() {
 		return this.items;
@@ -35,16 +41,8 @@ public class Inventaire {
 		return this.tailleMaxProperty.getValue();
 	}
 
-	public final void setTailleMax(int val) {
-		this.tailleMaxProperty.setValue(val);
-	}
-
 	public final IntegerProperty tailleMaxProperty() {
 		return this.tailleMaxProperty;
-	}
-
-	public void augmenterTailleMax(int val) {
-		this.setTailleMax(this.getTailleMax() + val);
 	}
 
 	public int getTaille() {
@@ -66,7 +64,7 @@ public class Inventaire {
 			}
 		}
 		else {
-			throw new ErreurInventairePlein("Tous ce que vous récolterez sera détruit.\nVous devriez videz vos poche pour récolter de nouveau.");
+			throw new ErreurInventairePlein();
 		}
 	}
 
@@ -195,6 +193,11 @@ public class Inventaire {
 		else {
 			return fleches;
 		}
+	}
+
+	public void setItems(ObservableList<Item> list) {
+		this.items=list;
+		
 	}
 
 

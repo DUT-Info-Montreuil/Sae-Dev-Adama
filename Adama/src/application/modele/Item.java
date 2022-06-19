@@ -9,7 +9,6 @@ import application.modele.exception.ErreurInventairePlein;
  */
 public interface  Item {
 	
-	public void utiliser(int val) throws ErreurInventairePlein;
-	
+	public void utiliser(int val) throws ErreurInventairePlein;	
 	
 }

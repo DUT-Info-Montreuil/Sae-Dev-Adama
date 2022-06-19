@@ -14,7 +14,6 @@ public abstract class Plante extends Ressource {
 		super(false, 5,5, indice);
 	}	
 	
-	
 	public int getTempsRepousse() {
 		return tempsRepousse;
 	}

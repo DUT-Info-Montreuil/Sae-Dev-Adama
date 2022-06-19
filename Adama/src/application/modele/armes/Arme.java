@@ -35,6 +35,10 @@ public abstract class Arme implements Item  {
 		return this.degat;
 	}
 	
+	public double getTempsRecharge() {
+		return this.tempsRecharge;
+	}
+	
 	public void enRecharge() {
 		this.recharger = true;
 	}

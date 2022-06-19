@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import application.modele.exception.ErreurPasDobjetCraftable;
+import application.modele.outils.Sceau;
+import application.modele.potions.AntiPoison;
+import application.modele.potions.Potion;
+import application.modele.potions.PotionDegat;
+import application.modele.potions.PotionVie;
+import application.modele.potions.PotionVitesse;
 import application.modele.Carte;
 import application.modele.Checkpoint;
 import application.modele.Environnement;
@@ -18,19 +25,12 @@ import application.modele.exception.ErreurArmeEtOutilPasJetable;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.exception.ErreurObjetInvalide;
-import application.modele.exception.ErreurPasDobjetCraftable;
-import application.modele.outils.Sceau;
-import application.modele.potions.AntiPoison;
-import application.modele.potions.Potion;
-import application.modele.potions.PotionDegat;
-import application.modele.potions.PotionVie;
-import application.modele.potions.PotionVitesse;
-import application.modele.ressources.Ressource;
-import application.modele.ressources.Terre;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import application.modele.ressources.Ressource;
+import application.modele.ressources.Terre;
 
 public class Joueur extends Personnage {
 
@@ -45,29 +45,37 @@ public class Joueur extends Personnage {
 	private final static int VITESSE_ACCROUPIE = 5;
 	private BooleanProperty estAccroupiProperty;
 	private final static int[] TAILLE = {1,2};
-
+	private boolean invincibiliter;
 
 
 
 	public Joueur(int pv,int x, int y,
 			Environnement environnement, int faim, Inventaire inventaire,
-			Item objetEquiper, Inventaire inventaireRaccourci, int hauteurSaut, int longueurSaut, Checkpoint checkpoint) {
-		super(pv, x, y,5, environnement,inventaire, hauteurSaut, TAILLE, longueurSaut, checkpoint);
+			Item objetEquiper, Inventaire inventaireRaccourci, int hauteurSaut) { 
+		super(pv, x, y, VITESSE_MARCHE, environnement,inventaire, hauteurSaut, TAILLE);
 		this.faimProperty = new SimpleIntegerProperty(faim);
 		this.objetEquiper = objetEquiper;
 		this.inventaireRaccourci = inventaireRaccourci;
 		this.estAccroupiProperty = new SimpleBooleanProperty(false);
+		this.invincibiliter = false;
 	}
 
 	public Joueur(int x, int y, Environnement environnement) {
-		super(Joueur.MAX_PV, x, y, 5, environnement, TAILLE );
-		this.faimProperty = new SimpleIntegerProperty(Joueur.MAX_FAIM);
+		super(MAX_PV, x, y, 5, environnement, TAILLE );
+		this.faimProperty = new SimpleIntegerProperty(MAX_FAIM);
 		this.objetEquiper = this.POING;
 		this.inventaireRaccourci = new Inventaire(10);
 		this.estAccroupiProperty = new SimpleBooleanProperty(false);
+		this.invincibiliter = false;
 	}
-
-
+	
+	public boolean estInvincible() {
+		return this.invincibiliter;
+	}
+	
+	public void setInvincibiliter(boolean val) {
+		this.invincibiliter = val;
+	}
 
 	public final int getFaim() {
 		return this.faimProperty.getValue();
@@ -138,9 +146,8 @@ public class Joueur extends Personnage {
 
 
 	public void courrir() {
-		super.setVitesseDeplacement(VITESSE_COURRIR);
+		this.setVitesseDeplacement(VITESSE_COURRIR);
 	}
-
 	
 	public void utiliserMain(int emplacement) throws ErreurInventairePlein, ErreurArmeEtOutilPasJetable, ErreurObjetIntrouvable {
 		if (objetEquiper instanceof Potion) {
@@ -158,7 +165,17 @@ public class Joueur extends Personnage {
 				break;
 			}
 		}
+		if(this.getDirection()) {
+			emplacement = this.getX() + Carte.TAILLE_BLOC;
+		}
+		else {
+			emplacement = this.getX() + Carte.TAILLE_BLOC;
+		}
+		if(this.objetEquiper instanceof Arme) {
+			this.getEnvironnement().attaquerPersonnages(emplacement, this.getArmeEquiper().getDegat());
+		}
 		this.objetEquiper.utiliser(emplacement);
+		
 		if (objetEquiper instanceof Terre) {
 			Carte carte = this.getEnvironnement().getCarte();
 			if(carte.getBlockMap().get(emplacement)== null) {
@@ -170,15 +187,15 @@ public class Joueur extends Personnage {
 					this.desequiper();
 			}
 		}
+	
 	}
 
 
 	public void accroupie() {
-		super.setVitesseDeplacement(VITESSE_ACCROUPIE);
-		this.setEstAccroupi(true);
+	
 	}
 
-	public void setModeDeplacement() { // TODO trouver un meilleure nom
+	public void setModeDeplacement() { // TODO trouver un meilleure nom 
 		if(this.getVitesseDeplacement() != VITESSE_COURRIR) {
 			this.setVitesseDeplacement(VITESSE_COURRIR);
 		}
@@ -190,8 +207,7 @@ public class Joueur extends Personnage {
 		}
 	}
 
-
-	public boolean estUneArmeOuUnOutil(Item item) {
+	public boolean estUneArmeOuUnOutil(Item item) { 
 		return item instanceof Arme || item instanceof Ressource;
 	}
 
@@ -209,7 +225,7 @@ public class Joueur extends Personnage {
 
 
 
-	public Item craft (ArrayList<Item> items) throws ErreurPasDobjetCraftable, ErreurObjetInvalide {
+	public Item craft (ArrayList<Item> items) throws ErreurPasDobjetCraftable, ErreurObjetInvalide { 
 		String pierre = "Pierre";
 		String bois = "Bois";
 		String planteDeNike = "PlanteDeNike";
@@ -224,37 +240,39 @@ public class Joueur extends Personnage {
 			PossedeSeau = (application.modele.outils.Sceau) super.getInventaire().getItems().get(indiceSaut);
 			if(PossedeSeau.EstRempli())
 				seau = "Seau";
+		String plante = "Plante";
 
 		Item item;
 		Map<String, Integer> recette = new HashMap<String, Integer>();
 
-		recette.put(pierre, 0);
+		recette.put(pierre, 0); 
 		recette.put(bois, 0);
-		recette.put(planteDeNike, 0);
-		recette.put(planteMedicinale, 0);
-		recette.put(planteHercule, 0);
-		recette.put(antiPoison, 0);
+		recette.put(plante, 0);
+
 		int k = 0;
+
 		try {
-			for(k = 0 ; k < items.size() ; k ++) {
+			for(k = 0 ; k < items.size() ; k ++) { 
 				recette.put(items.get(k).getClass().getSimpleName(), recette.get(items.get(k).getClass().getSimpleName()) + 1);
 			}
-		}catch (java.lang.NullPointerException e) {
+		}catch (java.lang.NullPointerException e) { 
 			throw new ErreurObjetInvalide(items.get(k));
 		}
 
-		if(recette.get(bois) == 2 && recette.get(pierre) == 1) // 2 bois et 1 pierre crée une épée
+		if(recette.get(bois) == 3 && recette.get(plante) == 1) {  // 3 bois et 1 plante crée un arc
+			item = new Arc(this.getInventaire()); // TODO revoir recette pour l'arc (remplacer la plante part de la ficelle)
+		}
+
+		else if(recette.get(bois) == 2 && recette.get(pierre) == 1) { // 2 bois et 1 pierre crée une épée
 			item = new Epee();
+		}
 
 
-		else if(recette.get(bois) == 1 && recette.get(pierre) == 1) // 1 de bois et 1 pierre crée une flèche
+		else if(recette.get(bois) == 1 && recette.get(pierre) == 1) { // 1 de bois et 1 pierre crée une flèche
 			item = new Fleche();
-		else if(recette.get(bois) == 3 && recette.get(fils) == 1) 
-			item = new Arc(super.getInventaire());
-		
-
+		}
 		else if(recette.get(bois) == 5)
-			return new Sceau(getEnvironnement());
+			return new Sceau(getEnvironnement().getCarte(), this);
 
 		else if (seau != null && recette.get(planteDeNike) == 2)
 			return new PotionVitesse();
@@ -272,11 +290,9 @@ public class Joueur extends Personnage {
 		return item;
 	}
 
-
 	public void jeter(Item item) throws ErreurArmeEtOutilPasJetable, ErreurObjetIntrouvable {
 		if(!this.estUneArmeOuUnOutil(item)) {
-
-			this.getInventaire().supprimer(item);;
+			this.getInventaire().supprimer(item);
 		}
 		else {
 			throw new ErreurArmeEtOutilPasJetable();
@@ -288,8 +304,8 @@ public class Joueur extends Personnage {
 		this.setPv(this.getPv() + 1);
 	}
 
-	public void incrementerPv(int nombrePvRestaurer) {
-		for (int i = 0; this.getPv() < Joueur.MAX_PV && i < nombrePvRestaurer ; i++) {
+	public void incrementerPv(int nourriture) {
+		for (int i = 0; this.getPv() < Joueur.MAX_PV && i < nourriture ; i++) {
 			this.soin();
 		}
 	}
@@ -299,11 +315,20 @@ public class Joueur extends Personnage {
 		this.setY(this.getCheckpoint().getY());
 	}
 
-
-
 	public Item getObjetEquiper() {
 		return objetEquiper;
+	}	
+
+	public Arme getArmeEquiper() {
+		if(this.objetEquiper instanceof Arme) {
+			return (Arme) this.objetEquiper;
+		}
+		else {
+			return this.POING;
+		}
 	}
 	
-	
+	public  void agir() throws ErreurObjetIntrouvable{
+		
+	}
 }

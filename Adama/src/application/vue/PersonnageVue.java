@@ -12,16 +12,15 @@ public class PersonnageVue {
 	public PersonnageVue(String nom) {
 		this.sprite = new ImageView("ressource/"+nom+".png");
 	}
-	
+
 	public ImageView getSprite() {
 		return sprite;
 	}
-	
-	public void setSprite(String sprite) {
-		this.sprite.setImage(new Image(sprite));
+
+	public void setSprite(String image) {
+		this.sprite.setImage(new Image(image));
 	}
-	
-	
+
 	public void orrientationSpriteGauche() {
 		if (sprite.effectiveNodeOrientationProperty().get()==NodeOrientation.RIGHT_TO_LEFT)
 			sprite.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);

@@ -1,5 +1,6 @@
 package application.controleur;
 
+import application.modele.Inventaire;
 import application.modele.Item;
 import application.modele.outils.Sceau;
 import application.modele.ressources.Ressource;
@@ -52,7 +53,9 @@ public class InventaireControleur implements ListChangeListener<Item> {
 
 				}
 				b.setImage(image);
-				compteur++;
+				Inventaire inventaire = new Inventaire(20);
+				inventaire.setItems((ObservableList<Item>) c.getList());
+				compteur = inventaire.getTaille();
 			}
 			//Si c est supprimer, on refait l'inventaire
 			if (c.wasRemoved()) {
@@ -78,12 +81,14 @@ public class InventaireControleur implements ListChangeListener<Item> {
 					img.setImage(image);
 				}
 				compteur = inventaireModele.size();
+				for(Item suppression : c.getRemoved()) {
+					Pane tuile = (Pane) inv.getChildren().get(c.getFrom());
+					tuile.setStyle("-fx-background-color: #bbbbbb;-fx-border-style:none;-fx-border-width:0px;");
+					ImageView img = (ImageView) tuile.getChildren().get(0);
+					img.setImage(null);
+				}
 
 			}
-
 		}
-
 	}
-
-
 }

@@ -20,6 +20,4 @@ public class Terre extends Ressource {
 	public void utiliser(int val) {
 		this.setIndice(val);
 	}
-
-	
 }

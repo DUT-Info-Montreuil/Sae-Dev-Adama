@@ -1,6 +1,6 @@
 package application.modele.outils;
 
-import application.modele.Environnement;
+import application.modele.Carte;
 import application.modele.Item;
 import application.modele.personnages.Joueur;
 
@@ -11,27 +11,23 @@ import application.modele.personnages.Joueur;
  */
 public abstract class Outil implements Item{
 	
-	private Environnement env;
+	private Carte carte;
 	private Joueur joueur;
-	private int effet; //correspond au dégat infligé au bloc e
+	private int effet; //correspond au dégat infligé au bloc ou au temps de remplisage du sceau
 	
 	/**
 	 * Crée un outil (soit une hache, soit une pelle, soit une pioche
 	 * @param env L'environnement dans lequel elle setrouve et avec lequel elle intéragie.
 	 * @param effet est la valeur nécessaire à l'utilisation(le temps, les dégats, la vitesse,...)
 	 */
-	public Outil(Environnement env, int effet) {
-		this.env=env;
-		this.joueur=this.env.getJoueur();
+	public Outil(Carte carte, Joueur joueur, int effet) {
+		this.carte=carte;
+		this.joueur=joueur;
 		this.effet=effet;
 	}
 	
-	/**
-	 * 
-	 * @return l'environnement
-	 */
-	public Environnement getEnvironnement() {
-		return env;
+	public Carte getCarte() {
+		return carte;
 	}
 	
 	public Joueur getJoueur() {

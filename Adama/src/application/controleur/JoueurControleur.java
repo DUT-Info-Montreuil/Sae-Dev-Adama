@@ -3,19 +3,20 @@ package application.controleur;
 import application.modele.exception.ErreurArmeEtOutilPasJetable;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
+import application.modele.armes.Epee;
 import application.modele.personnages.Joueur;
 import application.vue.JoueurVue;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 
 public class JoueurControleur {
 
 	private Joueur perso;
 	private JoueurVue persoVue;
 	private boolean messageDejaVu;
-
 
 	public JoueurControleur(Joueur perso, JoueurVue persoVue) {
 		this.perso=perso;
@@ -27,25 +28,37 @@ public class JoueurControleur {
 		switch (touchePresse) {
 			case "q":
 				persoVue.orrientationSpriteGauche();
-				if (perso.getSaut())
-					perso.sauterEnDirection(false);
-				else
-					perso.gauche();
+				perso.setEnDeplacement(true);
+				perso.gauche();
 				break;
 			case "d":
 				persoVue.orrientationSpriteDroite();
-				if (perso.getSaut())
-					perso.sauterEnDirection(true);
-				else
-					perso.droite();
+				perso.setEnDeplacement(true);
+				perso.droite();
 				break;
 			case "z":
 				if(!perso.touchePasY(false))
-					perso.sauter();
+					if(perso.getEnDeplacement())
+						perso.sauterEnDirection(perso.getDirection());
+					else
+						perso.sauter();
 				break;
 			case "s":
 				break;
-		}
+				
+		
+			
+			case "c":
+				Epee epee = new Epee();
+				perso.equiper(epee);
+				persoVue.setSprite("ressource/persoEpeeRanger.png");
+				break;
+				
+			case "v":
+				persoVue.setSprite("ressource/persoEpeeLever.png");
+				
+	
+			}	
 	}
 
 	public void sourisPresse(String click, int emplacement) {
@@ -79,5 +92,19 @@ public class JoueurControleur {
 		default:
 			break;
 		}
+	}
+
+	public void toucheRelache(String touchePresse) {
+		switch (touchePresse) {
+		case "q":
+			perso.setEnDeplacement(false);
+			perso.gauche();
+			break;
+		case "d":
+			perso.setEnDeplacement(false);
+			perso.droite();
+			break;
+		}
+		
 	}
 }

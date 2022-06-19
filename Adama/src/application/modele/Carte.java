@@ -6,6 +6,7 @@ import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.TailleMapException;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Pierre;
+import application.modele.ressources.Plante;
 import application.modele.ressources.PlanteDeNike;
 import application.modele.ressources.PlanteHercule;
 import application.modele.ressources.PlanteMedicinale;
@@ -18,8 +19,6 @@ import javafx.collections.ObservableList;
  * Cette classe contient 3 constante qui sont la hauteur et la largeur de la map en nombre de blocs et la taille de chaque bloc.
  * Elle peut lancer deux exception : TailleMapException, IOException
  * Elle possède un constructeur
- * 
- * @author jberguig
  *
  */
 public class Carte {
@@ -27,31 +26,60 @@ public class Carte {
 	private BufferedReader map;
 	public final static int HAUTEUR = 32;
 	public final static int LARGEUR = 60;
-	public final static int TAILLE_BLOCK = 32;
+	public final static int TAILLE_BLOC = 32;
 	private ObservableList<Ressource> blocMap;
-	public Carte() throws TailleMapException, IOException {
+	private Inventaire items;
+
+	public Carte() throws IOException, TailleMapException  {
 		this.map = Csv.ouvrir("mapsTest.csv");
 		this.blocMap = FXCollections.observableArrayList();
 		creerListeBlock();
+		this.items = new Inventaire(99);
+	}
+
+	public int aMemeLeSol(int x) {
+		x-=x%TAILLE_BLOC;
+		int y = -1;
+		int i = 0;
+		boolean trouvee=false;
+		while (i<(LARGEUR*HAUTEUR) && !trouvee) {
+			if (this.blocMap.get(i)!=null && this.blocMap.get(i).getX()==x) {
+				y=this.blocMap.get(i).getY();
+				trouvee=true;
+			}
+				
+			i++;
+		}		
+		return y;
+	}
+	
+	public Ressource emplacement(int x, int y) {
+		int indiceDansMap = (x/TAILLE_BLOC) + ((y/TAILLE_BLOC) * LARGEUR);
+		return this.blocMap.get(indiceDansMap);
 	}
 	
 	/**
-	 * Calcule un indice dans la map en divisant les x et les y par la taille du bloc et en multipliant
-	 * les y par la Largeur de la Carte puisque la structure de données est linéaire. 
-	 * Et enfin de faire la somme des deux pour retourner le bloc a cette indice
-	 * @param x position sur l'axe des x
-	 * @param y position sur l'axe des y
-	 * @return le bloc à indiceMap
+	 * Renvoie la première ressource qui se trouve à l'endroit occuper par le personnage et null si il n'y en a aucun
+	 * @param x du personnage
+	 * @param y du personnage
+	 * @param taille du personnage
+	 * @return
 	 */
-	
-	public Ressource emplacement(int x, int y) {
-		int indiceDansMap = (x/TAILLE_BLOCK) + ((y/TAILLE_BLOCK) * LARGEUR);
-		return this.blocMap.get(indiceDansMap);
-	}
-	
 	public Ressource emplacement(int x, int y, int[] taille) {
-		int indiceDansMap = (x/TAILLE_BLOCK)+(taille[0]/2) + ((y/TAILLE_BLOCK) * LARGEUR)+taille[1];
-		return this.blocMap.get(indiceDansMap);
+		Ressource unBloc = null;
+		int longueur=0;
+		int hauteur;
+		while((unBloc==null || unBloc instanceof Plante) && longueur<taille[0]) {
+			hauteur=0;
+			while((unBloc==null || unBloc instanceof Plante) && hauteur<taille[1]) {
+				unBloc = emplacement(x+TAILLE_BLOC*longueur, y+TAILLE_BLOC*hauteur);
+				hauteur++;
+			}
+			longueur++;
+		}
+		if (unBloc instanceof Plante)
+			unBloc=null;
+		return unBloc;
 	}
 	
 	/**
@@ -80,22 +108,22 @@ public class Carte {
 				suivant=ligne.charAt(indice);
 				switch (suivant) {
 					case '2':
-						blocMap.add(new Terre(true, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Terre(true, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '3':
-						blocMap.add(new Bois(false, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Bois(false, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '4':
-						blocMap.add(new Pierre(false, x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new Pierre(false, x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '5':
-						blocMap.add(new PlanteDeNike(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteDeNike(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '6':
-						blocMap.add(new PlanteHercule(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteHercule(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					case '7':
-						blocMap.add(new PlanteMedicinale(x*TAILLE_BLOCK, y*TAILLE_BLOCK, x+(y*((ligne.length()+1)/2))));
+						blocMap.add(new PlanteMedicinale(x*TAILLE_BLOC, y*TAILLE_BLOC, x+(y*((ligne.length()+1)/2))));
 						break;
 					default://tous las chiffres de tuile avec lesquelles on ne peut intéragir (ciel, nuage,...)
 						blocMap.add(null);
@@ -119,49 +147,32 @@ public class Carte {
 	 * @param indice
 	 * @throws ErreurInventairePlein 
 	 */
-	public Ressource detruireBlock(int indice) {
+	public Ressource detruireBlock(int indice) throws ErreurInventairePlein {
 		Ressource blocDetruit = this.blocMap.remove(indice);
 		this.blocMap.add(indice, null);
 		return blocDetruit;
-	}
-	/**
-	 * @param ressource la ressource testé
-	 * @return si la ressource est en dehors de la map
-	 */
-	
-
-	/**
-	 * Si on trouve des blocs dans blockMap avec x et y en dehors de la map ils sont détruit.
-	 * @throws ErreurInventairePlein 
-	 * 
-	 */
-	public void ressourceEnDehorsMap() throws ErreurInventairePlein {
-		for(int i = 0 ; i < this.getBlockMap().size(); i++) {
-			if(this.blocMap.get(i).estEnDehorsMap()){
-				this.detruireBlock(i);
-			}
-		}
 	}
 
 	/**
 	 * Permet de faire des degats à des blocs
 	 * @param indice l'endroit où se trouve le bloc dans la liste 
 	 * @param val de combien il est attaquée
-	 * @return 
+	 * @throws ErreurInventairePlein 
 	 */
-	public Ressource attaquerBloc(int indice, int val) {
+	public Ressource attaquerBloc(int indice, int val) throws ErreurInventairePlein {
 		this.blocMap.get(indice).prendreDegat(val);
 		if (this.blocMap.get(indice).estDetruit())
 			return detruireBlock(indice);
-		return null;			
+		return null;
 	}
 
-	/**
-	 * 
-	 * @return la blocMap
-	 */
 	public ObservableList<Ressource> getBlockMap() {
 		return blocMap;
-	}	
+	}
+	
+	public Inventaire getItems() {
+		return items;
+	}
+	
 }
 

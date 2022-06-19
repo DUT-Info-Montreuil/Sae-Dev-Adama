@@ -6,15 +6,12 @@ import application.modele.Inventaire;
 import application.modele.effet.Effet;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
-import java.io.IOException;
-
 import application.modele.Carte;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Plante;
 import application.modele.ressources.Ressource;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -40,11 +37,11 @@ public abstract class Personnage {
 	private int[] taille;
 	private Checkpoint checkpoint;
 	private boolean saut;
-
-	//	private int longueurSaut;
 	private ObservableList<Effet> effets;
+	private boolean direction; //true = droite || gauche = false
+	private boolean enDeplacement;
 
-	public Personnage(int pv, int x, int y, int vitesseDeplacement, Environnement environnement,Inventaire inventaire, int hauteurSaut, int[] taille, int longueurSaut, Checkpoint checkpoint){
+	public Personnage(int pv, int x, int y, int vitesseDeplacement, Environnement environnement,Inventaire inventaire, int hauteurSaut, int[] taille, Checkpoint checkpoint){
 		this.pvProperty = new SimpleIntegerProperty(pv);
 		this.xProperty = new SimpleIntegerProperty(x);
 		this.yProperty = new SimpleIntegerProperty(y);
@@ -53,20 +50,17 @@ public abstract class Personnage {
 		this.inventaire = inventaire;
 		this.hauteurSaut = hauteurSaut;
 		this.taille = taille;
-
-
-		//		this.longueurSaut = longueurSaut;
-		this.environnement.ajouter(this);
-
 		this.hauteurMaxSaut = this.hauteurSaut;
 		this.environnement.ajouter(this);
 		this.checkpoint = checkpoint;
 		this.id= compteur;
 		compteur++;
-		this.effets = FXCollections.observableArrayList();
-		effets.addAll(null, null, null, null); //Chaque valeur correspond à un effet different
+		this.direction=false;
+		this.enDeplacement=false;
 	}
 
+	
+	
 	public Personnage(int pv, int x, int y, int vitesseDeplacement, Environnement environnement, int[] taille){
 		this.pvProperty = new SimpleIntegerProperty(pv);
 		this.xProperty = new SimpleIntegerProperty(x);
@@ -79,15 +73,47 @@ public abstract class Personnage {
 		this.taille = taille;
 		this.environnement.ajouter(this);
 		this.checkpoint = new Checkpoint(x,y,environnement);
-		this.effets = FXCollections.observableArrayList();
-		effets.addAll(null, null, null, null);
+		this.id= compteur;
+		compteur++;
+		this.direction=false;
+		this.enDeplacement=false;
 	}
+
+	public Personnage(int pv, int x, int y, int vitesseDeplacement, Environnement environnement,
+			Inventaire inventaire, int hauteurSaut, int[] taille) {
+		this.pvProperty = new SimpleIntegerProperty(pv);
+		this.xProperty = new SimpleIntegerProperty(x);
+		this.yProperty = new SimpleIntegerProperty(y);
+		this.vitesseDeplacement = vitesseDeplacement;
+		this.environnement = environnement;
+		this.inventaire = inventaire;
+		this.hauteurSaut = hauteurSaut;
+		this.taille = taille;
+		this.hauteurMaxSaut = this.hauteurSaut;
+		this.environnement.ajouter(this);
+		this.id= compteur;
+		compteur++;
+		this.direction=false;
+		this.enDeplacement=false;
+	}
+
+
 
 	public void setCheckpoint(Checkpoint checkpoint) {
 		this.checkpoint = checkpoint;
 	}
+	
+	public boolean getEnDeplacement() {
+		return this.enDeplacement;
+	}
+	
+	public void setEnDeplacement(boolean enDeplacement) {
+		this.enDeplacement = enDeplacement;
+	}
 
-
+	public boolean getDirection() {
+		return this.direction;
+	}
 	/**
 	 * Augmente les PV
 	 * @param soin nombre de pv récupéré
@@ -112,7 +138,7 @@ public abstract class Personnage {
 			this.meurt();
 		}
 	}
-
+	
 	public Checkpoint getCheckpoint() {
 		return this.checkpoint;
 	}
@@ -162,20 +188,20 @@ public abstract class Personnage {
 		int i=0;
 		if(auDessus) {
 			while (i<taille[0] && gaucheTuile) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*i+1, this.getY()-Carte.TAILLE_BLOCK*taille[1]);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*i+1, this.getY()-Carte.TAILLE_BLOC*taille[1]);
 				gaucheTuile = ( blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*taille[0]-1, this.getY()-Carte.TAILLE_BLOCK*taille[1]);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()-Carte.TAILLE_BLOC*taille[1]);
 			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		else {
 			while (i<taille[0] && gaucheTuile) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*i+1, this.getY()+Carte.TAILLE_BLOCK*taille[1]);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*i+1, this.getY()+Carte.TAILLE_BLOC*taille[1]);
 				gaucheTuile = ( blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK*taille[0]-1, this.getY()+Carte.TAILLE_BLOCK*taille[1]);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()+Carte.TAILLE_BLOC*taille[1]);
 			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		return (gaucheTuile && droiteSprite);
@@ -207,10 +233,10 @@ public abstract class Personnage {
 	public void sauterEnDirection(boolean direction) { //TODO a finir saut en direction
 		this.sauter();
 		if(direction) {
-			this.translationX(-1);
+			this.droite();
 		}
 		else {
-			this.translationX(1);
+			this.gauche();
 		}
 	}
 
@@ -219,13 +245,28 @@ public abstract class Personnage {
 	}
 
 	public void droite() {
-		if(touchePasX(true))
+		if(touchePasX(true) && !this.estEnDehorsMap(vitesseDeplacement, 0))
 			this.translationX(-vitesseDeplacement);
+		this.direction=true;
 	}
 
 	public void gauche() {
-		if(touchePasX(false))
+		if(touchePasX(false) && !this.estEnDehorsMap(-vitesseDeplacement, 0)) {
 			this.translationX(vitesseDeplacement);
+		}
+		this.direction=false;
+	}
+	
+	public void droitePousse(int pousseDe) {
+		if(touchePasX(true))
+			this.translationX(-pousseDe);
+		this.direction=false;
+	}
+
+	public void gauchePousse(int pousseDe) {
+		if(touchePasX(false))
+			this.translationX(pousseDe);
+		this.direction=true;
 	}
 
 	/**
@@ -242,20 +283,20 @@ public abstract class Personnage {
 		int i = 0;
 		if(aDroite) {
 			while (i<taille[1] && hautTuileTouchePas) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK+1, this.getY()+Carte.TAILLE_BLOCK*i);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC+1, this.getY()+Carte.TAILLE_BLOC*i);
 				hautTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois|| blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOCK+1, this.getY()+Carte.TAILLE_BLOCK*taille[1]-1);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC+1, this.getY()+Carte.TAILLE_BLOC*taille[1]-1);
 			basTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		else {
 			while (i<taille[1] && hautTuileTouchePas) {
-				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOCK*i);
+				blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOC*i);
 				hautTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois|| blocAEmplacement instanceof Plante);
 				i++;
 			}
-			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOCK*taille[1]-1);
+			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()-1, this.getY()+Carte.TAILLE_BLOC*taille[1]-1);
 			basTuileTouchePas = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		return (hautTuileTouchePas && basTuileTouchePas);
@@ -288,7 +329,10 @@ public abstract class Personnage {
 	public void gravite() {
 		this.descendre(2);
 		if (this.saut)
-			sauter();
+			if (this.enDeplacement)
+				sauterEnDirection(direction);
+			else
+				sauter();
 	}
 
 	public final int getPv() {
@@ -346,9 +390,13 @@ public abstract class Personnage {
 	public boolean estEnDehorsMap() {
 		return this.getX() < 0 || this.getY() > 0;
 	}
+	
+	public boolean estEnDehorsMap(int valX, int valY) {
+		return this.getX() + valX < 0 || this.getX() + valX > 1890 ;
+	}
 
 
-	public boolean estEnLaire() throws IOException {
+	public boolean estEnLaire() {
 		int[] taille = {1,2};//provisoire
 		return this.environnement.getCarte().emplacement(this.getX(), this.getY(), taille)==null;
 	}
@@ -402,30 +450,111 @@ public abstract class Personnage {
 	 * @return Retourne true si le joueur est à porter du personnage , false sinon
 	 * @throws ErreurObjetIntrouvable Survient si aucune instance de la classe Joueur est présente dans la carte
 	 */
-	public boolean estAporterDuJoueur() throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
+//	public boolean estAporterDuJoueur() throws ErreurObjetIntrouvable { // TODO a simplifier
+//		Joueur joueur = this.getEnvironnement().getJoueur();
+//		return this.getX() - this.getLongueurSaut() <= joueur.getX()  && this.getX() >= joueur.getX() || this.getX() + this.getLongueurSaut() >= joueur.getX()  && this.getX() <= joueur.getX();
+//	}
+	
+	public boolean estAporterDuJoueur(int val) throws ErreurObjetIntrouvable { // TODO a simplifier
 		Joueur joueur = this.getEnvironnement().getJoueur();
-		return this.getX() - this.vitesseDeplacement*this.hauteurMaxSaut <= joueur.getX()  && this.getX() >= joueur.getX() || this.getX() + this.vitesseDeplacement*this.hauteurMaxSaut >= joueur.getX()  && this.getX() <= joueur.getX();
+		if(this.getX() - val < joueur.getX()  && this.getX() >= joueur.getX()) {
+			return true;
+		}
+		
+		else if(this.getX() + val > joueur.getX()  && this.getX() <= joueur.getX()) {
+			return true;
+		}
+		
+		
+		else{
+			return  false ;
+		}
 	}
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Vérifie si le joueur se trouve dans un rayon de val blocs autour du personnage, val étant la varaiable passé en paramètre
 	 * @param val : valeur correspondant au rayon du cercle qui définit si le joueur est à portee
 	 * @param
 	 * @return Retourne true si le joueur est près du personnage , false sinon
-	 */
-	public boolean estPrèsDuJoueur(int valX, int valY) { // peut-être à mettre dans Personnage
-		Joueur joueur = this.getEnvironnement().getJoueur(); // faire abscisse
-		return this.getX() - valX <= joueur.getX()  && this.getX() >= joueur.getX() && (this.getY() == joueur.getY() || (this.getY() + valY  <= joueur.getY() && this.getY() >= joueur.getY()) || this.getY() - valY <= joueur.getY()&& this.getY() >= joueur.getY())
-				|| this.getX() + valX >= joueur.getX()  && this.getX() < joueur.getX() && (this.getY() == joueur.getY() || (this.getY() - valY  >= joueur.getY()  && this.getY() <= joueur.getY()) || this.getY() + valY >= joueur.getY() && this.getY() <= joueur.getY());
+	 */	
+	public boolean estPrèsDuJoueur(int valX, int valY) throws ErreurObjetIntrouvable {
+		Joueur joueur = this.getEnvironnement().getJoueur(); // TODO a commenter, a debugger
+		if(this.getX() - valX <= joueur.getX()  && this.getX() >= joueur.getX()) { // Si le joueur se trouve dans un rayon de valX derriere le personnage
+			
+			if (this.getY() == joueur.getY() ) {
+				return true;
+			}
+			
+			else if((this.getY() + valY  <= joueur.getY() && this.getY() >= joueur.getY())) {
+				return true;
+			}
+			
+			else if(this.getY() - valY <= joueur.getY()&& this.getY() >= joueur.getY()){
+				return true;
+			}
+		}
+		if (this.getX() + valX >= joueur.getX()  && this.getX() < joueur.getX()) { // Si le joueur se trouve dans un rayon de valX devant le personnage
+			
+			if(this.getY() == joueur.getY()) {
+				return true;
+			}
+			
+			else if(this.getY() - valY  <= joueur.getY()  && this.getY() >= joueur.getY()){
+				return true;
+			}
+			
+			else if(this.getY() + valY <= joueur.getY() && this.getY() >= joueur.getY()){
+				return true;
+			}
+		}
+		
+		return  false;
+	}
+	
+	
+	
+	public boolean estPrèsDunPerso(int valX, int valY, Personnage perso) throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
+		if (this.getX() - valX <= perso.getX()  && this.getX() >= perso.getX()){
+			return true;
+		}
+			
+		if( this.getX() + valX >= perso.getX()  && this.getX() < perso.getX()){
+			return true;
+		}
+				
+		else {
+			return false;
+		}
+	}
+	
+	public Personnage estPrèsDunPerso(int valX, int valY) throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
+		for (Personnage perso : this.environnement.getPersonnages()) {
+			if(this.estPrèsDunPerso(valX, valY, perso) && perso != this && !perso.estMort()) {
+				return perso;
+			}
+		}
+		throw new ErreurObjetIntrouvable("t","o");
 	}
 
 	public boolean estSurLeJoueur() throws ErreurObjetIntrouvable { // peut-être à mettre dans Personnage
 		Joueur joueur = this.getEnvironnement().getJoueur();
 		boolean surJoueur = false;
-		surJoueur = ((this.getX() >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOCK*joueur.getTaille()[0])
-				|| (this.getX()+Carte.TAILLE_BLOCK*this.getTaille()[0] >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOCK*joueur.getTaille()[0]))
+		surJoueur = ((this.getX() >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOC*joueur.getTaille()[0])
+					|| (this.getX()+Carte.TAILLE_BLOC*this.getTaille()[0] >= joueur.getX() && this.getX() <= joueur.getX()+Carte.TAILLE_BLOC*joueur.getTaille()[0]))
 				&& ((this.getY() >= joueur.getY() && this.getY() <= joueur.getY()+32*joueur.getTaille()[1])
-						|| (this.getY()+Carte.TAILLE_BLOCK*this.getTaille()[1] >= joueur.getY() && this.getY() <= joueur.getY()+Carte.TAILLE_BLOCK*joueur.getTaille()[1]));
+					|| (this.getY()+Carte.TAILLE_BLOC*this.getTaille()[1] >= joueur.getY() && this.getY() <= joueur.getY()+Carte.TAILLE_BLOC*joueur.getTaille()[1]));
 		return surJoueur;
 	}
 
