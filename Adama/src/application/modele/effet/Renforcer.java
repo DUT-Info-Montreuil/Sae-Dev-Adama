@@ -14,7 +14,9 @@ public class Renforcer extends Effet {
 	@Override
 	public void appliquerEffet() {
 		super.getPerso().ajouterEffet(this);
-
 	}
 
+	public int getPourcenetageRenforcement() {
+		return POURCENTAGE_RENFORCEMENT;
+	}
 }

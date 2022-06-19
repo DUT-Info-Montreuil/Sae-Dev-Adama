@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import application.modele.armes.Arme;
+import application.modele.effet.Renforcer;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.exception.TailleMapException;
@@ -27,7 +28,7 @@ public class Environnement {
 	}
 	
 	public void initJeu() {
-		ajouter(new Joueur(420, 576, this));
+		new Joueur(420, 576, this);
 		Checkpoint checkpoint = new Checkpoint(340,576,this);
 		this.getJoueur().setCheckpoint(checkpoint);
 	}
@@ -35,17 +36,19 @@ public class Environnement {
 	public void tourDejeu() {
 		if (personnages.size()<50)
 			ajouter(faireSpawner());
+		
 		personnages.forEach(pnj -> {
 			if (pnj instanceof Pnj)
 				try {
 					((Pnj)pnj).agir();
 				} catch (ErreurObjetIntrouvable e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		});
+		
 		personnages.forEach(perso -> perso.gravite());
-		if(personnages.get(0).estMort() ) {
+		
+		if(personnages.get(0).estMort()) {
 			System.out.println("Game over");
 			personnages.get(0).incrementerPv(7);
 			((Joueur) personnages.get(0)).teleporterToCheckpoint();
@@ -127,7 +130,7 @@ public class Environnement {
 				j++;
 			}
 			if (touche)
-				perso.decrementerPv(armePorte.getDegat());
+				perso.decrementerPv(armePorte.getDegat()+armePorte.getDegat()*((Renforcer)perso.getEffets().get(2)).getPourcenetageRenforcement());
 			if (perso.estMort()) {
 				perso.meurt();
 				this.supprimer(i);
@@ -135,23 +138,4 @@ public class Environnement {
 			touche = false;
 		}
 	}
-
-//	public ArrayList<Personnage> emplacementPerso(int x, int y, int[] taille) {
-//		ArrayList<Personnage> personnagesTouches = new ArrayList<>();
-//		int tailleBloc = Carte.TAILLE_BLOC;
-//		boolean toucheX;
-//		boolean toucheY;
-//		for (Personnage perso : this.personnages) {
-//			toucheX = 	(perso.getX()+perso.getTaille()[0]*tailleBloc)>=x && perso.getX()<=x
-//					||	(perso.getX()+perso.getTaille()[0]*tailleBloc)<=x && perso.getX()>=x;
-//
-//			toucheY = 	(perso.getY()+perso.getTaille()[1]*tailleBloc)>=y && perso.getY()<=y
-//					||	(perso.getY()+perso.getTaille()[1]*tailleBloc)<=y && perso.getY()>=y;
-//
-//			if (toucheX && toucheY)
-//				personnagesTouches.add(perso);				
-//		}
-//		
-//		return personnagesTouches;
-//	}
 }

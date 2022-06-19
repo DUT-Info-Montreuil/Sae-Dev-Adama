@@ -4,24 +4,16 @@ import application.modele.Checkpoint;
 import application.modele.Environnement;
 import application.modele.Inventaire;
 import application.modele.effet.Effet;
-import application.modele.effet.Ralentir;
 import application.modele.exception.ErreurInventairePlein;
 import application.modele.exception.ErreurObjetIntrouvable;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 import application.modele.Carte;
 import application.modele.ressources.Bois;
 import application.modele.ressources.Plante;
 import application.modele.ressources.Ressource;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 /**
@@ -129,7 +121,7 @@ public abstract class Personnage {
 	public void setEnDeplacement(boolean enDeplacement) {
 		this.enDeplacement = enDeplacement;
 	}
-
+	
 	public boolean getDirection() {
 		return this.direction;
 	}
@@ -212,7 +204,7 @@ public abstract class Personnage {
 				i++;
 			}
 			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()-Carte.TAILLE_BLOC*taille[1]);
-			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
+			droiteSprite = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		else {
 			while (i<taille[0] && gaucheTuile) {
@@ -221,7 +213,7 @@ public abstract class Personnage {
 				i++;
 			}
 			blocAEmplacement = this.environnement.getCarte().emplacement(this.getX()+Carte.TAILLE_BLOC*taille[0]-1, this.getY()+Carte.TAILLE_BLOC*taille[1]);
-			droiteSprite = (blocAEmplacement ==null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
+			droiteSprite = (blocAEmplacement == null || blocAEmplacement instanceof Bois || blocAEmplacement instanceof Plante);
 		}
 		return (gaucheTuile && droiteSprite);
 	}

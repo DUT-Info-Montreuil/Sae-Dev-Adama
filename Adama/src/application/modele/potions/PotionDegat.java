@@ -1,7 +1,6 @@
 package application.modele.potions;
 
 import application.modele.effet.Renforcer;
-import application.modele.exception.ErreurObjetIntrouvable;
 import application.modele.personnages.Joueur;
 
 public class PotionDegat extends Potion {

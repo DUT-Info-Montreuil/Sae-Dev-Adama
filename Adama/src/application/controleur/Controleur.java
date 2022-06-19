@@ -95,9 +95,7 @@ public class Controleur implements Initializable{
 
 	@FXML
 	void sourisPresse(MouseEvent event) {
-		//		if(event.getTarget().equals(plateau)) {
 		String click = event.getButton().name();
-		//		System.out.println(click);
 		int x = (int) event.getSceneX();
 		int y = (int) event.getSceneY();
 		Ressource cible = env.getCarte().emplacement(x, y);
@@ -108,7 +106,6 @@ public class Controleur implements Initializable{
 		else {
 			persoControleur.sourisPresse(click, env.getCarte().getBlocMap().indexOf(cible));
 		}
-		//		}
 	}
 
 	@FXML
@@ -175,15 +172,12 @@ public class Controleur implements Initializable{
 	@FXML
 	void toucheRelache(KeyEvent event) throws ErreurInventairePlein {
 		String touchePresse = event.getCode().toString().toLowerCase();
-		System.out.println(touchePresse);
 		persoControleur.toucheRelache(touchePresse);
 	}
 		
 	@FXML
 	void touchePresse(KeyEvent event) throws ErreurInventairePlein {
 		String touchePresse = event.getCode().toString().toLowerCase();
-
-		//		System.out.println(touchePresse);
 		switch (touchePresse) {
 		case "e":
 			ouvrirInventaire();
