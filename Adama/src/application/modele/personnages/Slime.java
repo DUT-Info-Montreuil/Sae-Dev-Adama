@@ -33,7 +33,8 @@ public class Slime extends Ennemis {
 						this.gauche();
 						this.setEnDeplacement(true);
 					}
-					if(!this.touchePasX(this.getDirection()) )
+					int x = this.getDirection() ? getX()+Carte.TAILLE_BLOC : getX()-Carte.TAILLE_BLOC;
+					if(!this.touchePasX(this.getDirection()) && this.getEnvironnement().getCarte().emplacement(x, getY()-HAUTEUR_SAUT)==null)
 						this.sauterEnDirection(this.getDirection());
 				}
 			}	

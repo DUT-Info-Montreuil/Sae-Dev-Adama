@@ -73,7 +73,6 @@ public class Carte {
 			hauteur=0;
 			while((unBloc==null || unBloc instanceof Plante) && hauteur<taille[1]) {
 				unBloc = emplacement(x+TAILLE_BLOC*longueur, y+TAILLE_BLOC*hauteur);
-				System.out.println("unBloc = "+unBloc);
 				hauteur++;
 			}
 			longueur++;

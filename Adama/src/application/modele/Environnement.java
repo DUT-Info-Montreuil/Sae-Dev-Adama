@@ -57,7 +57,6 @@ public class Environnement {
 		double chanceSpwan = Math.random();
 		int x = (int) (Math.random()*Carte.TAILLE_BLOC*Carte.LARGEUR);
 		int y = this.carte.aMemeLeSol(x);
-		System.out.println(this.carte.emplacement(x, y, Cerf.TAILLE));
 		if (chanceSpwan<0.001) {
 			vontSpawner.add(new Slime(x, y-Carte.TAILLE_BLOC*Slime.TAILLE[1], this));
 		}
