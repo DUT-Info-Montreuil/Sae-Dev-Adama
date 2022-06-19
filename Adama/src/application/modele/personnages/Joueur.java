@@ -152,25 +152,10 @@ public class Joueur extends Personnage {
 	}
 
 	public void utiliserMain(int emplacement) throws ErreurInventairePlein, ErreurArmeEtOutilPasJetable, ErreurObjetIntrouvable {
-		if (objetEquiper instanceof Potion) {
-			String potion = objetEquiper.getClass().getSimpleName();
-			switch (potion) {
-			case "PotionVie":
-				
-				break;
-			case "PotionVitesse":
-//				super.Deplacement(objetEquiper.getDuree());
-				break;
-			case "AntiPoison":
-				super.SupprimerEffet(0);
-			default:
-				break;
-			}
-		}
 		if(this.objetEquiper instanceof Arme) {
 			this.getEnvironnement().attaquerPersonnages(this);
 		}
-		
+		this.objetEquiper.utiliser(emplacement);
 		if (objetEquiper instanceof Terre) {
 			Carte carte = this.getEnvironnement().getCarte();
 			if(carte.getBlocMap().get(emplacement) == null) {
